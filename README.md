@@ -1,7 +1,7 @@
 # Online Sequential Optimization
 
-Course from O. Wintenberger for Master M2A @ Sorbonne Université
-Course Website: http://wintenberger.fr/ens.html
+Course from O. Wintenberger for Master M2A @ Sorbonne Université.   
+Website: http://wintenberger.fr/ens.html
 
 ## Implemented Algorithms
 - Gradient Descent

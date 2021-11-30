@@ -27,8 +27,8 @@ def proj_l1(vect):
 
 
 if __name__ == '__main__':
-    vect = np.random.rand(10)
-    p = proj_l1(vect)
-    print(vect)
+    x = np.random.rand(10)
+    p = proj_l1(x)
+    print(x)
     print(p)
     print(sum([abs(vi) for vi in p]))

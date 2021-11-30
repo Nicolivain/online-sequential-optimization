@@ -12,10 +12,10 @@ def proj_l1(vect):
         return vect
 
     nvc  = list(deepcopy(vect))
-    topk = [nvc.pop(np.argmax(vect))]
+    topk = [nvc.pop(np.argmax(vect).min())]  # min in case of equality eg len(argmax)>1
     d0 = 1
     while nvc[np.argmax(nvc)] > 1/d0 * (sum(topk) - 1):
-        topk.append(nvc.pop(np.argmax(nvc)))
+        topk.append(nvc.pop(np.argmax(nvc).min()))
         d0 += 1
         if d0 > len(vect):
             break
@@ -27,8 +27,7 @@ def proj_l1(vect):
 
 
 if __name__ == '__main__':
+    # Unit Testing
     x = np.random.rand(10)
     p = proj_l1(x)
-    print(x)
-    print(p)
     print(sum([abs(vi) for vi in p]))

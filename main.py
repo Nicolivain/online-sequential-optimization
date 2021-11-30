@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import pathlib as Path
 
-from Algorithms.GD import GradientDescent
+from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd
 from Models.LinearSVM import LinearSVM
 from utils import *
@@ -21,12 +21,13 @@ from utils import *
 
 # --- PARAMETERS ---
 
-lr          = 0.01
+lr          = 0.0001
 nepoch      = 51
 lbd         = 1
-verbose     = 5
+z           = 10
+verbose     = 1
 
-alg_to_run = ['sgd']
+alg_to_run = ['c_gd']
 
 
 
@@ -56,6 +57,16 @@ if 'gd' in alg_to_run:
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, GDloss[-1], GDacc))
+
+
+# Constrained GD: projection on B1(z)
+
+if 'c_gd' in alg_to_run:
+    model = LinearSVM(m)
+    GDloss = projected_gd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    GDacc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained GD (radius {:2d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, z, GDloss[-1], GDacc))
 
 # Unconstrained SGD
 

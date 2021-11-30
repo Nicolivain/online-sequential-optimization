@@ -23,7 +23,7 @@ def proj_l1(vect):
     theta = 1/d0 * (sum(topk) - 1)
 
     soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in vect]  # we make sure to keep the sign
-    return soft_threshold
+    return np.array(soft_threshold)
 
 
 if __name__ == '__main__':

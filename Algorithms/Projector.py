@@ -22,12 +22,14 @@ def proj_l1(vect):
 
     theta = 1/d0 * (sum(topk) - 1)
 
-    soft_threshold = [max(vi-theta, 0) for vi in vect]
+    soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in vect]  # we make sure to keep the sign
     return soft_threshold
 
 
 if __name__ == '__main__':
     # Unit Testing
-    x = np.random.rand(10)
+    x = np.random.rand(10) * 2 - 1
     p = proj_l1(x)
+    print(x)
+    print(p)
     print(sum([abs(vi) for vi in p]))

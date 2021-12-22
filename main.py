@@ -37,6 +37,7 @@ alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd']
 mnist_train=pd.read_csv('mnist_train.csv', sep=',', header=None)  # Reading
 train_data = mnist_train.values[:, 1:]                               # Extract data
 train_data = train_data / np.max(train_data)                         # Normalize data
+# TODO : add intersept here ie a column with only 1 + on the test set 
 train_labels = mnist_train.values[:, 0]                              # Extract labels
 train_labels[np.where(train_labels != 0)] = -1                       # if labels is not 0 => -1 (Convention chosen)
 train_labels[np.where(train_labels == 0)] = 1                        # if label is 0 ==> 1

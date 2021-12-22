@@ -12,6 +12,16 @@ def accuracy(y_pred, y_true):
         raise KeyError("prediction and truth must be the same size")
     return np.sum(y_pred == y_true)/len(y_true)
 
+def error(y_pred, y_true):
+    """
+    Compute the error of the provided predictions
+    y_pred (n) : prediciton
+    y_true (n) : true value to predict
+    """
+    if len(y_pred) != len(y_true):
+        raise KeyError("prediction and truth must be the same size")
+    return np.sum(y_pred != y_true)/len(y_true)
+
 
 def plot_loss(loss, graph_title=None):
     """

@@ -32,6 +32,7 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
         :param lr: (float) learning rate
         :param epoch: (int) maximum number of iteration of the algorithm
         :param l:  (float) regularization parameter (lambda)
+        :param z: (float) radius for projection on the l1-ball
         :param verbose: (int) print epoch results every n epochs
         """
 

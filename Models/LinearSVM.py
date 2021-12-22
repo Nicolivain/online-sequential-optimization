@@ -35,6 +35,6 @@ class LinearSVM:
     def predict(self, data):
         """
         predict values using coeff x and new data data
-        /!\ return values in -1/1 format instead of -1/0 as labels
+        data (list) : the data for prediction
         """
-        return -1 * (data.dot(self.w) < 0)
+        return (data.dot(self.w) > 0)

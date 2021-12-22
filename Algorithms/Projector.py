@@ -17,7 +17,7 @@ def proj_l1(vect):
     while nvc[np.argmax(nvc)] > 1/d0 * (sum(topk) - 1):
         topk.append(nvc.pop(np.argmax(nvc).min()))
         d0 += 1
-        if d0 > len(vect):
+        if d0 > len(vect) - 1:
             break
 
     theta = 1/d0 * (sum(topk) - 1)

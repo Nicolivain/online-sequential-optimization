@@ -78,7 +78,6 @@ if 'sgd' in alg_to_run:
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, loss[-1], acc))
-
 # Projected SGD
 
 if 'c_sgd' in alg_to_run:

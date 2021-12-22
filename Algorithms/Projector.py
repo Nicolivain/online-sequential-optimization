@@ -2,9 +2,9 @@ import numpy as np
 from copy import deepcopy
 
 
-def proj_l1(vect):
+def proj_simplex(vect):
     """
-    Projects the vector vect on the L1-ball
+    Projects the vector vect on the simplex
     :param vect: vector of size (n)
     """
 
@@ -25,11 +25,27 @@ def proj_l1(vect):
     soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in vect]  # we make sure to keep the sign
     return np.array(soft_threshold)
 
+def proj_l1(vect, z) : 
+    """
+    Projects the vector vect on the L1-ball
+    :param vect: vector of size (n)
+    :param z: radius of the l1-ball considered
+    """
+
+    if (np.abs(vect) <= 1).all():
+        return vect
+    wstar = proj_simplex(np.abs(vect) / z)
+    return np.sign(vect) * wstar # produit terme à terme
+
 
 if __name__ == '__main__':
     # Unit Testing
     x = np.random.rand(10) * 2 - 1
-    p = proj_l1(x)
+    p = proj_simplex(x)
+    p2 = proj_l1(x, 1)
     print(x)
     print(p)
     print(sum([abs(vi) for vi in p]))
+    print(p2)
+    print(np.abs(p2) < np.ones(10))
+    print(np.abs(p2) < 1)

@@ -41,7 +41,7 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
     for i in range(epoch):
 
         new_wts = model.w - lr * model.gradLoss(x, y, l)
-        model.w  = z * proj_l1(new_wts / z)
+        model.w  = proj_l1(new_wts, z)
 
         current_loss = model.loss(x, y, l)
         losses += [current_loss]

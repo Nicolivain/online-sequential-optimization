@@ -37,4 +37,5 @@ class LinearSVM:
         predict values using coeff x and new data data
         data (list) : the data for prediction
         """
-        return (data.dot(self.w) > 0)
+
+        return np.sign(data.dot(self.w))

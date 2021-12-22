@@ -29,7 +29,6 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
 
         # update the last xt
         new_wts = wts[-1] - lr * model.gradLoss(sample_x, sample_y, l)
-        model.w = new_wts
         wts.append(new_wts)
 
         # loss
@@ -40,7 +39,7 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
     # update wts:
-    model.w = np.mean(wts)
+    model.w = np.mean(wts, axis=0)
     return losses
 
 def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
@@ -68,7 +67,6 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
         # update the last xt
         new_wts = wts[-1] * (1 - 1/(i + 1)) - model.gradLoss(sample_x, sample_y, l) / ((i + 1)* l)
         new_wts  = proj_l1(new_wts / z)
-        model.w = new_wts
         wts.append(new_wts)
 
         # loss
@@ -79,5 +77,5 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
     # update wts:
-    model.w = np.mean(wts)
+    model.w = np.mean(wts, axis=0)
     return losses

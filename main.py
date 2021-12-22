@@ -61,7 +61,6 @@ if 'gd' in alg_to_run:
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, GDloss[-1], GDacc))
 
-
 # Constrained GD: projection on B1(z)
 
 if 'c_gd' in alg_to_run:
@@ -86,7 +85,5 @@ if 'c_sgd' in alg_to_run:
     model = LinearSVM(m)
     loss = projected_sgd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
     pred_test_labels = model.predict(test_data)
-    print(test_labels)
-    print(pred_test_labels)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, loss[-1], acc))

@@ -9,6 +9,7 @@ from Algorithms.Projector import proj_l1
 def sgd(model, X, y, lr, epoch, l, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param model: the model
         :param X: (nxm) data
         :param y: (n)  labels
         :param lr: (float) learning rate
@@ -45,9 +46,11 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
     model.w = np.mean(wts, axis=0)
     return losses
 
+
 def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param model: the model
         :param X: (nxm) data
         :param y: (n)  labels
         :param lr: (float) learning rate

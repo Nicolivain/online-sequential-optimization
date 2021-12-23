@@ -21,15 +21,14 @@ from utils import *
 
 # --- PARAMETERS ---
 
-lr          = 0.0001
+lr          = 0.1
 nepoch      = 51
 lbd         = 1
 z           = 10
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd']
-# alg_to_run = ['c_sgd']
-
+alg_to_run = [ 'c_gd', 'sgd', 'c_sgd']
+#alg_to_run = ['sgd']
 
 
 ############################### Read and prepare data ###############################
@@ -69,11 +68,11 @@ if 'gd' in alg_to_run:
 
 if 'c_gd' in alg_to_run:
     model = LinearSVM(m)
-    GDprojloss = projected_gd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    GDloss = projected_gd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained GD (radius {:2d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, z, GDloss[-1], GDacc))
-    plt.plot(np.arange(nepoch), GDprojloss)
+    plt.plot(np.arange(nepoch), GDloss)
 
 # Unconstrained SGD
 

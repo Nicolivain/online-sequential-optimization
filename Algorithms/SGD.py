@@ -29,9 +29,9 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
-        # t = i + 1
-        # lr = 1 / (l * t) # TODO : check why it doesn't work with decresing lr
-        new_wts = wts[-1] - lr * model.gradLoss(sample_x, sample_y, l)
+        t = i + 1
+        dlr = lr / (l * t)
+        new_wts = wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
         wts.append(new_wts)
         model.w = new_wts
 
@@ -71,9 +71,9 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
-        # t = i + 1
-        # lr = 1 / (l * t) 
-        new_wts = wts[-1] - lr * model.gradLoss(sample_x, sample_y, l)
+        t = i + 1
+        dlr = lr / (l * t)
+        new_wts = wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
         new_wts  = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts

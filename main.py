@@ -37,7 +37,7 @@ alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd']
 mnist_train=pd.read_csv('mnist_train.csv', sep=',', header=None)  # Reading
 train_data = mnist_train.values[:, 1:]                               # Extract data
 train_data = train_data / np.max(train_data)                         # Normalize data
-# TODO : add intersept here ie a column with only 1 + on the test set 
+train_data = np.c_[train_data, np.ones(train_data.shape[0])]         # Add intersept
 train_labels = mnist_train.values[:, 0]                              # Extract labels
 train_labels[np.where(train_labels != 0)] = -1                       # if labels is not 0 => -1 (Convention chosen)
 train_labels[np.where(train_labels == 0)] = 1                        # if label is 0 ==> 1
@@ -45,11 +45,13 @@ train_labels[np.where(train_labels == 0)] = 1                        # if label 
 mnist_test=pd.read_csv('mnist_test.csv', sep=',', header=None)
 test_data = mnist_test.values[:, 1:]
 test_data = test_data / np.max(test_data)
+test_data = np.c_[test_data, np.ones(test_data.shape[0])]
 test_labels = mnist_test.values[:, 0]
 test_labels[np.where(test_labels != 0)] = -1
 test_labels[np.where(test_labels == 0)] = 1
 
 n, m = train_data.shape
+fig = plt.figure()
 
 ############################### Test algorithms ###############################
 
@@ -61,29 +63,37 @@ if 'gd' in alg_to_run:
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, GDloss[-1], GDacc))
+    plt.plot(np.arange(nepoch), GDloss)
 
 # Constrained GD: projection on B1(z)
 
 if 'c_gd' in alg_to_run:
     model = LinearSVM(m)
-    GDloss = projected_gd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    GDprojloss = projected_gd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained GD (radius {:2d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, z, GDloss[-1], GDacc))
+    plt.plot(np.arange(nepoch), GDprojloss)
 
 # Unconstrained SGD
 
 if 'sgd' in alg_to_run:
     model = LinearSVM(m)
-    loss = sgd(model, train_data, train_labels, lr, nepoch, lbd, verbose)
+    SGDloss = sgd(model, train_data, train_labels, lr, nepoch, lbd, verbose)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, loss[-1], acc))
+    print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SGDloss[-1], acc))
+    plt.plot(np.arange(nepoch), SGDloss)
+
 # Projected SGD
 
 if 'c_sgd' in alg_to_run:
     model = LinearSVM(m)
-    loss = projected_sgd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    SGDprojloss = projected_sgd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, loss[-1], acc))
+    print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SGDprojloss[-1], acc))
+    plt.plot(np.arange(nepoch), SGDprojloss)
+
+plt.legend(alg_to_run)
+plt.show()

@@ -15,6 +15,7 @@ import pathlib as Path
 
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
+from Algorithms.RFTL import smd
 from Models.LinearSVM import LinearSVM
 from utils import *
 
@@ -27,9 +28,8 @@ lbd         = 1
 z           = 10
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd']
-# alg_to_run = ['c_sgd']
-
+alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd']
+alg_to_run = ['smd']
 
 
 ############################### Read and prepare data ###############################
@@ -94,6 +94,15 @@ if 'c_sgd' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SGDprojloss[-1], acc))
     plt.plot(np.arange(nepoch), SGDprojloss)
+
+if 'smd' in alg_to_run:
+    model = LinearSVM(m)
+    SMDprojloss = smd(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained SMD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SMDprojloss[-1], acc))
+    plt.plot(np.arange(nepoch), SMDprojloss)
+    print(model.w)
 
 plt.legend(alg_to_run)
 plt.show()

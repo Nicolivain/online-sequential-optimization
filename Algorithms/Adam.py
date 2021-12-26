@@ -1,12 +1,13 @@
 """
-This file contains functions for Exploration algorithm applied at the SVM problem
+This file contains functions for Adam applied at the SVM problem
+https://arxiv.org/pdf/1412.6980.pdf
 """
 import random as rd
 import numpy as np
 from Algorithms.Projector import proj_l1, weighted_proj_simplex
 
 
-def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
+def adam(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
         :param X: (nxm) data
@@ -15,14 +16,17 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
         :param epoch: (int) maximum number of iteration of the algorithm
         :param l:  (float) regularization parameter (lambda)
         :param z: (float) radius of the l1-ball
+        :param betas:(1x2) exponential decay rates for the moment estimates
         :param verbose: (int) print epoch results every n epochs
         """
 
     n, d = X.shape
     losses = []
     wts = [1 / (2*d) * np.zeros(d)]
-    tetatp = np.zeros(d)
-    tetatm = np.zeros(d)
+    mts = np.zeros(d)
+    mt_1s = np.zeros(d)
+    vts = np.zeros(d)
+    vt_1s = np.zeros(d)
 
     for i in range(epoch):
 
@@ -34,13 +38,13 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
 
-        tetatm[Jt] -= (etat * model.gradLoss(sample_x, sample_y, l))[Jt]
-        tetatp[Jt] += (etat * model.gradLoss(sample_x, sample_y, l))[Jt]
-        tetat = np.r_[tetatm, tetatp]
-        new_wts = np.exp(tetat)/np.sum(np.exp(tetat))
-        new_wts  = z * (new_wts[0:d] - new_wts[d:])
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
+        mtchap = mts/(1 - betas[0]**t)
+        vtchap = vts/(1 - betas[1]**t)
+
+        new_wts = wts[-1] - lr * mtchap / (np.sqrt(vtchap + 10e-8))
         wts.append(new_wts)
         model.w = new_wts
 
@@ -51,11 +55,9 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
-    # update wts:
-    model.w = np.mean(wts, axis=0)
     return losses, np.array(wts)
 
-def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
+def adamproj(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
         :param X: (nxm) data
@@ -64,14 +66,17 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
         :param epoch: (int) maximum number of iteration of the algorithm
         :param l:  (float) regularization parameter (lambda)
         :param z: (float) radius of the l1-ball
+        :param betas:(1x2) exponential decay rates for the moment estimates
         :param verbose: (int) print epoch results every n epochs
         """
 
     n, d = X.shape
     losses = []
     wts = [1 / (2*d) * np.zeros(d)]
-    tetatp = np.zeros(d)
-    tetatm = np.zeros(d)
+    mts = np.zeros(d)
+    mt_1s = np.zeros(d)
+    vts = np.zeros(d)
+    vt_1s = np.zeros(d)
 
     for i in range(epoch):
 
@@ -80,22 +85,17 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
         Jt = np.random.randint(0, d, 1) # sample the direction
-        sgt = np.random.randint(0, 2, 1, dtype=bool) # sample the sign : True is + and False is -
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
 
-        # if sign is > 0 then we modify the first part 
-        if sgt :
-            tetatm[Jt] -= (etat * model.gradLoss(sample_x, sample_y, l))[Jt] 
-        # sign is < 0 then we modify this part 
-        else :
-            tetatp[Jt] += (etat * model.gradLoss(sample_x, sample_y, l))[Jt]
-        tetat = np.r_[tetatm, tetatp]
-        new_wts = np.exp(tetat)/np.sum(np.exp(tetat)) * (1 - etat) + etat / (2 * d)
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
+        mtchap = mts/(1 - betas[0]**t)
+        vtchap = vts/(1 - betas[1]**t)
 
-        new_wts  = z * (new_wts[0:d] - new_wts[d:])
+        new_wts = wts[-1] - lr * mtchap / (np.sqrt(vtchap + 10e-8))
+        new_wts  = weighted_proj_simplex(new_wts, np.diag(vts))
         wts.append(new_wts)
         model.w = new_wts
 
@@ -103,9 +103,10 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
         current_loss = model.loss(X, y, l)
         losses.append(current_loss)
 
+        mt_1s = mts
+        vt_1s = vts
+
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
-    # update wts:
-    model.w = np.mean(wts, axis=0)
     return losses, np.array(wts)

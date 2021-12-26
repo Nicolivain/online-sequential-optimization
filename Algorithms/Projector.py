@@ -40,7 +40,7 @@ def proj_l1(vect, z) :
 def weighted_proj_simplex(vect, weight):
     """
     Projects the vector vect on the simplex
-    :param vect: vector of size (n)
+    :param vect: vector of size (nxn)
     """
 
     if sum([abs(vi) for vi in vect]) == 1:

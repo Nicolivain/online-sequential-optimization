@@ -26,7 +26,7 @@ def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
     for i in range(epoch):
 
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
@@ -71,7 +71,7 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
     for i in range(epoch):
 
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
@@ -117,7 +117,7 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
     for i in range(epoch):
 
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 

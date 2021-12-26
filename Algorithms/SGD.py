@@ -44,7 +44,7 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)
 
 
 def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
@@ -88,4 +88,4 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
     # update wts:
     model.w = np.mean(wts, axis=0)
     
-    return losses, wts
+    return losses, np.array(wts)

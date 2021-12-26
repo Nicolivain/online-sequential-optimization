@@ -47,7 +47,7 @@ def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)
 
 
 def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
@@ -95,7 +95,7 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)
 
 def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
@@ -138,4 +138,4 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)

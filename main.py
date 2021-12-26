@@ -24,13 +24,12 @@ from utils import *
 # --- PARAMETERS ---
 
 lr          = 0.1
-nepoch      = 51
+nepoch      = 100
 lbd         = 1
 z           = 10
 verbose     = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'sreg', 'sbeg']
-alg_to_run = ['sreg', 'sbeg']
 
 
 ############################### Read and prepare data ###############################
@@ -154,6 +153,13 @@ if 'sbeg' in alg_to_run:
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
+# Log scale
+ax[0].set_xscale('log')
+ax[0].set_yscale('log')
+ax[1].set_xscale('log')
+ax[1].set_yscale('log')
+
+# legend
 ax[0].legend(alg_to_run)
 ax[1].legend(alg_to_run)
 plt.show()

@@ -53,7 +53,7 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)
 
 def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
@@ -108,4 +108,4 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)

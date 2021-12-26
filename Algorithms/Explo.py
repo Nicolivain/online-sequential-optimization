@@ -55,6 +55,7 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
     model.w = np.mean(wts, axis=0)
     return losses, np.array(wts)
 
+
 def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters

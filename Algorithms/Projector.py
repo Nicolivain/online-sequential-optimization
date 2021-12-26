@@ -37,10 +37,12 @@ def proj_l1(vect, z) :
     wstar = proj_simplex(np.abs(vect) / z)
     return np.sign(vect) * wstar # produit terme à terme
 
+
 def weighted_proj_simplex(vect, weight):
     """
     Projects the vector vect on the simplex
     :param vect: vector of size (nxn)
+    :param weight: weights of the components
     """
 
     if sum([abs(vi) for vi in vect]) == 1:

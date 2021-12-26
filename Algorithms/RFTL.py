@@ -7,9 +7,11 @@ from Algorithms.Projector import proj_l1, weighted_proj_simplex
 
 # TODO : use the mean to update the model (cf .R) because that's the interesting result and not value 
 
+
 def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param model: the model
         :param X: (nxm) data
         :param y: (n)  labels
         :param lr: (float) learning rate
@@ -53,6 +55,7 @@ def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
 def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param model: the model
         :param X: (nxm) data
         :param y: (n)  labels
         :param lr: (float) learning rate
@@ -97,9 +100,11 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
     model.w = np.mean(wts, axis=0)
     return losses, np.array(wts)
 
+
 def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param model: the model
         :param X: (nxm) data
         :param y: (n)  labels
         :param lr: (float) learning rate
@@ -124,7 +129,7 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
         # update the last xt
         Sts += model.gradLoss(sample_x, sample_y, l)**2
         Dt = np.diag(np.sqrt(Sts))
-        yts= wts[-1] - np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
+        yts = wts[-1] - np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
         new_wts = weighted_proj_simplex(yts, Dt)
         wts.append(new_wts)
         model.w = new_wts

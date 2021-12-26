@@ -38,4 +38,4 @@ class LinearSVM:
         data (list) : the data for prediction
         """
 
-        return np.sign(data.dot(self.w)) # TODO : check here why - ? 
+        return np.sign(data.dot(self.w)) 

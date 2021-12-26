@@ -48,8 +48,10 @@ def compute_accuracies(wts, X, y_true):
     y_true (n) : true value to predict
     """
     accs = []
+    it, d = wts.shape
+    wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) # TODO : look if mean not usefull during algorithms also
 
-    for weigts in wts:
+    for weigts in wts_mean:
         y_pred = np.sign(X.dot(weigts))
         acc = accuracy(y_pred, y_true)
         accs.append(acc)

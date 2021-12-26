@@ -12,6 +12,7 @@ Main file
 import numpy as np
 import pandas as pd
 import pathlib as Path
+from Algorithms.Explo import sbeg, sreg
 
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
@@ -23,13 +24,12 @@ from utils import *
 # --- PARAMETERS ---
 
 lr          = 0.1
-nepoch      = 51
+nepoch      = 100
 lbd         = 1
 z           = 10
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad']
-# alg_to_run = ['adagrad']
+alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'sreg', 'sbeg']
 
 
 ############################### Read and prepare data ###############################
@@ -133,6 +133,33 @@ if 'adagrad' in alg_to_run:
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
+if 'sreg' in alg_to_run:
+    model = LinearSVM(m)
+    SREGloss, wts = sreg(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained SREG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SREGloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), SREGloss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'sbeg' in alg_to_run:
+    model = LinearSVM(m)
+    SBEGloss, wts = sbeg(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained SBEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SBEGloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), SBEGloss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+# Log scale
+ax[0].set_xscale('log')
+ax[0].set_yscale('log')
+ax[1].set_xscale('log')
+ax[1].set_yscale('log')
+
+# legend
 ax[0].legend(alg_to_run)
 ax[1].legend(alg_to_run)
 plt.show()

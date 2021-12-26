@@ -24,7 +24,7 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
     for i in range(epoch):
 
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
@@ -44,7 +44,7 @@ def sgd(model, X, y, lr, epoch, l, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)
 
 
 def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
@@ -66,7 +66,7 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
     for i in range(epoch):
 
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
@@ -88,4 +88,4 @@ def projected_sgd(model, X, y, lr, epoch, l, z=1, verbose=0):
     # update wts:
     model.w = np.mean(wts, axis=0)
     
-    return losses, wts
+    return losses, np.array(wts)

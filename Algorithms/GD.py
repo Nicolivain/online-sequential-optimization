@@ -2,6 +2,7 @@
 This file contains functions for gradient descent algorithm applied at the SVM problem
 """
 from Algorithms.Projector import proj_l1
+import numpy as np
 
 
 def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
@@ -10,7 +11,7 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
     :param X: (nxm) data
     :param y: (n)  labels
     :param lr: (float) learning rate
-    :param epoch: (int) maximum number of iteration of the algorithm
+    :param epoch: (int) maximum number of iteration of the algorithmnp.array(wts)
     :param l:  (float) regularization parameter (lambda)
     :param verbose: (int) print epoch results every n epochs
     """
@@ -24,7 +25,7 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
         losses += [current_loss]
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
-    return losses, wts
+    return losses, np.array(wts)
 
 
 def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
@@ -53,4 +54,4 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
-    return losses, wts
+    return losses, np.array(wts)

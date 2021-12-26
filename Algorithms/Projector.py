@@ -1,5 +1,6 @@
 import numpy as np
 from copy import deepcopy
+import math
 
 
 def proj_simplex(vect):
@@ -32,7 +33,7 @@ def proj_l1(vect, z) :
     :param z: radius of the l1-ball considered
     """
 
-    if (np.abs(vect) <= 1).all():
+    if np.abs(vect).sum()<=1:
         return vect
     wstar = proj_simplex(np.abs(vect) / z)
     return np.sign(vect) * wstar # produit terme à terme
@@ -64,6 +65,22 @@ def weighted_proj_simplex(vect, weight):
     soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in Dx]  # we make sure to keep the sign
     return np.linalg.inv(weight).dot(np.array(soft_threshold))
 
+
+def weighted_proj_l1(vect, w, z=1):
+    """Weighted projection on the l1-ball of
+    - vect of size (n)
+    - using weights w
+    - and the radius z of the l1-ball considered
+    """
+    if np.sum(np.abs(vect))>z & math.isinf(z) == False & math.isnan(z) == False:
+        v = np.abs(vect*w)
+        ind = np.argsort(-v)
+        sum_vect = np.cumsum(np.abs(vect)[ind])
+        sum_w = np.cumsum(1/w[ind])
+        rho = np.max(np.where(v[ind]>(sum_vect - z)/sum_w))
+        theta = (sum_vect[rho] - z) / sum_w[rho]
+        vect = np.sign(vect)*np.clip(np.abs(vect) - theta/w, 0, np.max(np.abs(vect) - theta/w))
+    return vect
 
 if __name__ == '__main__':
     # Unit Testing

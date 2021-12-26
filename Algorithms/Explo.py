@@ -1,5 +1,5 @@
 """
-This file contains functions for gradient descent algorithm applied at the SVM problem
+This file contains functions for Exploration algorithm applied at the SVM problem
 """
 import random as rd
 import numpy as np

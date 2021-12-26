@@ -36,7 +36,7 @@ alg_to_run = ['adam', 'adamproj', 'adamp', 'adamtemp', 'adamax', 'adamaxtemp']
 
 ############################### Read and prepare data ###############################
 
-mnist_train=pd.read_csv('mnist_train.csv', sep=',', header=None)  # Reading
+mnist_train = pd.read_csv('mnist_train.csv', sep=',', header=None)   # Reading
 train_data = mnist_train.values[:, 1:]                               # Extract data
 train_data = train_data / np.max(train_data)                         # Normalize data
 train_data = np.c_[train_data, np.ones(train_data.shape[0])]         # Add intersept
@@ -44,7 +44,7 @@ train_labels = mnist_train.values[:, 0]                              # Extract l
 train_labels[np.where(train_labels != 0)] = -1                       # if labels is not 0 => -1 (Convention chosen)
 train_labels[np.where(train_labels == 0)] = 1                        # if label is 0 ==> 1
 
-mnist_test=pd.read_csv('mnist_test.csv', sep=',', header=None)
+mnist_test = pd.read_csv('mnist_test.csv', sep=',', header=None)
 test_data = mnist_test.values[:, 1:]
 test_data = test_data / np.max(test_data)
 test_data = np.c_[test_data, np.ones(test_data.shape[0])]
@@ -227,4 +227,3 @@ ax[1].set_yscale('log')
 ax[0].legend(alg_to_run)
 ax[1].legend(alg_to_run)
 plt.show()
-

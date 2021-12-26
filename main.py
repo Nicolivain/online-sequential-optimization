@@ -22,7 +22,7 @@ from utils import *
 
 # --- PARAMETERS ---
 
-lr          = 0.0001
+lr          = 0.1
 nepoch      = 51
 lbd         = 1
 z           = 10

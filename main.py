@@ -12,6 +12,7 @@ Main file
 import numpy as np
 import pandas as pd
 import pathlib as Path
+from Algorithms.Explo import sreg
 
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
@@ -28,8 +29,8 @@ lbd         = 1
 z           = 10
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad']
-# alg_to_run = ['adagrad']
+alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'sreg']
+alg_to_run = ['sreg']
 
 
 ############################### Read and prepare data ###############################
@@ -130,6 +131,16 @@ if 'adagrad' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Adagradloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Adagradloss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'sreg' in alg_to_run:
+    model = LinearSVM(m)
+    SREGloss, wts = sreg(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained SREG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SREGloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), SREGloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 

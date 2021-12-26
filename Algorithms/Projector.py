@@ -32,7 +32,7 @@ def proj_l1(vect, z) :
     :param z: radius of the l1-ball considered
     """
 
-    if (np.abs(vect) <= 1).all():
+    if (np.abs(vect) <= 1).sum():
         return vect
     wstar = proj_simplex(np.abs(vect) / z)
     return np.sign(vect) * wstar # produit terme à terme

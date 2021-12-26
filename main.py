@@ -12,7 +12,7 @@ Main file
 import numpy as np
 import pandas as pd
 import pathlib as Path
-from Algorithms.Adam import adam, adamproj
+from Algorithms.Adam import adaMax, adaMaxTemporal, adam, adamTemporal, adamproj
 from Algorithms.Explo import sbeg, sreg
 
 from Algorithms.GD import GradientDescent, projected_gd
@@ -31,7 +31,7 @@ z           = 10
 verbose     = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'sreg', 'sbeg']
-alg_to_run = ['adam', 'adamproj']
+alg_to_run = ['adam', 'adamproj', 'adamax', 'adamtemp', 'adamaxtemp']
 
 
 ############################### Read and prepare data ###############################
@@ -165,6 +165,16 @@ if 'adam' in alg_to_run:
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
+if 'adamtemp' in alg_to_run:
+    model = LinearSVM(m)
+    AdamTemploss, wts = adamTemporal(model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, adam with temporal averaging algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, AdamTemploss[-1], acc))
+    ax[0].plot(np.arange(nepoch), AdamTemploss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
 if 'adamproj' in alg_to_run:
     model = LinearSVM(m)
     AdamProjloss, wts = adamproj(model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
@@ -172,6 +182,26 @@ if 'adamproj' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, projected adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, AdamProjloss[-1], acc))
     ax[0].plot(np.arange(nepoch), AdamProjloss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'adamax' in alg_to_run:
+    model = LinearSVM(m)
+    AdaMaxLoss, wts = adaMax(model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, AdaMax algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, AdaMaxLoss[-1], acc))
+    ax[0].plot(np.arange(nepoch), AdaMaxLoss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'adamaxtemp' in alg_to_run:
+    model = LinearSVM(m)
+    AdaMaxTempLoss, wts = adaMaxTemporal(model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, AdaMax with temporal averaging algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, AdaMaxTempLoss[-1], acc))
+    ax[0].plot(np.arange(nepoch), AdaMaxTempLoss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 

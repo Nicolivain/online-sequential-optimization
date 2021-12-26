@@ -9,16 +9,17 @@ from Algorithms.Projector import proj_l1, weighted_proj_simplex
 
 def adam(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -62,17 +63,18 @@ def adam(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
 
 def adamP(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], p=2, verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param p: (int) norm to be considered (1 <= p )
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param p: (int) norm to be considered (1 <= p )
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -116,16 +118,17 @@ def adamP(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], p=2, verbose=0):
 
 def adamproj(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -170,16 +173,17 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
 
 def adaMax(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -221,16 +225,17 @@ def adaMax(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
 
 def adamTemporal(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -279,16 +284,17 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0
 
 def adaMaxTemporal(model, X, y, lr, epoch, l, z=1, betas = [0.9, 0.999], verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param betas:(1x2) exponential decay rates for the moment estimates
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param betas:(1x2) exponential decay rates for the moment estimates
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []

@@ -39,3 +39,19 @@ def plot_loss(loss, graph_title=None):
             idx = [i for i in range(len(vals))]
             ax = plt.plot(idx, vals, title=graph_title, legend=key)
         return ax
+
+def compute_accuracies(wts, X, y_true):
+    """
+    Compute the accuracy wrt time of the provided predictions and data
+    wts (txm) : weigths at each time step of the algo
+    X (nxm) : data to be predicted
+    y_true (n) : true value to predict
+    """
+    accs = []
+
+    for weigts in wts:
+        y_pred = np.sign(X.dot(weigts))
+        acc = accuracy(y_pred, y_true)
+        accs.append(acc)
+    return accs
+

@@ -15,13 +15,16 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
     :param verbose: (int) print epoch results every n epochs
     """
     losses = []
+    wts = [model.w]
     for i in range(epoch):
-        model.w -= lr * model.gradLoss(X, y, l)
+        new_wts = wts[-1] - lr * model.gradLoss(X, y, l)
+        wts.append(new_wts)
+        model.w = new_wts
         current_loss = model.loss(X, y, l)
         losses += [current_loss]
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
-    return losses
+    return losses, wts
 
 
 def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
@@ -38,14 +41,16 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
 
     assert z > 0, 'L1-Ball radius should be positive'
     losses = []
+    wts = [model.w]
     for i in range(epoch):
 
         new_wts = model.w - lr * model.gradLoss(x, y, l)
-        model.w  = proj_l1(new_wts, z)
-
+        new_wts  = proj_l1(new_wts, z)
+        wts.append(new_wts)
+        model.w = new_wts
         current_loss = model.loss(x, y, l)
         losses += [current_loss]
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
-    return losses
+    return losses, wts

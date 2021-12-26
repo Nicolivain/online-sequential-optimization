@@ -30,7 +30,7 @@ class LinearSVM:
         else:
             grad = -b * a  # no need for repeat if n=1
         grad[np.where(temp < 0)] = 0
-        return np.sum(grad, 0) + l * self.w
+        return np.sum(grad, 0) + l * self.w  #TODO : why not a vector here ?
 
     def predict(self, data):
         """

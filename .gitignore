@@ -1,4 +1,6 @@
 /__pycache__
 /**/__pycache__
+__pycache__
+**/__pycache__
 /mnist_test.csv
 /mnist_train.csv

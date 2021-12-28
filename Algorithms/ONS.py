@@ -22,24 +22,28 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     losses = []
     wts = [np.zeros(len(model.w))]
     n, _ = X.shape
-    A = np.diag([1 / gamma ** 2 for i in range(n)])
-    Ainv = np.diag([gamma ** 2 for i in range(n)])
+    d = len(wts[-1])
+    A = np.diag([1 / gamma**2 for i in range(d)])
+    Ainv = np.diag([gamma**2 for i in range(d)])
 
     for i in range(epoch):
-
         # sample
         idx = rd.randint(0, n)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
-
-        new_wts = wts[-1] - 1/gamma * Ainv @ model.gradLoss(sample_x, sample_y, l)
+        grad = model.gradLoss(sample_x, sample_y, l)
+        new_wts = wts[-1] - (1/gamma) * Ainv @ grad
         new_wts  = weighted_proj_l1(new_wts, np.diag(A), z)
         wts.append(new_wts)
         model.w = new_wts
-        A += model.gradLoss(sample_x, sample_y, l) @ model.gradLoss(sample_x, sample_y, l).T
+        A += grad @ grad.T #Hessian approximated by grad@grad.T
         Ainv = np.linalg.inv(A)
+
+        # other inv update
+        # Ainst = Ainv@grad #vect
+        # Ainv -= 1/(1+grad.T@Ainst)*Ainst@Ainst.T
 
         # loss
         current_loss = model.loss(X, y, l)

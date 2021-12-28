@@ -24,14 +24,16 @@ from utils import *
 # --- PARAMETERS ---
 
 lr          = 0.1
-nepoch      = 51
+nepoch      = 101 #51 or 101
 lbd         = 1/3
-z           = 10
+z           = 100
 gamma       = 1/8
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons']
-# alg_to_run = ['adagrad']
+np.random.seed(123)
+
+# alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons']
+alg_to_run = ['ons', 'c_sgd']
 
 
 ############################### Read and prepare data ###############################
@@ -135,14 +137,14 @@ if 'adagrad' in alg_to_run:
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
-if 'ons' in alg_to_run:
+if 'ons' in alg_to_run: #try with rate instead of compute_accuracies
     model = LinearSVM(m)
-    Onsloss, wts = ons(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    Onsloss, wts = ons(model, train_data, train_labels, nepoch, lbd, gamma, z, verbose)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, constrained ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Onsloss[-1], acc))
+    print('After {:3d} epoch, ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Onsloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Onsloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 ax[0].legend(alg_to_run)

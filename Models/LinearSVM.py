@@ -28,9 +28,9 @@ class LinearSVM:
         if b.shape != ():
             grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a  # reshape b to nxm to use term-by-term multiplication
         else:
-            grad = -b * a  # no need for repeat if n=1
+            grad = -b * a  # no need for repeat if n = 1
         grad[np.where(temp < 0)] = 0
-        return np.sum(grad, 0) + l * self.w  #TODO : why not a vector here ?
+        return np.sum(grad, 0) + l * self.w
 
     def predict(self, data):
         """
@@ -38,4 +38,4 @@ class LinearSVM:
         data (list) : the data for prediction
         """
 
-        return np.sign(data.dot(self.w)) # TODO : check here why - ? 
+        return np.sign(data.dot(self.w))

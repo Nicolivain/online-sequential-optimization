@@ -24,7 +24,7 @@ from utils import *
 # --- PARAMETERS ---
 
 lr          = 0.1
-nepoch      = 101 #51 or 101
+nepoch      = 51 #101 or 101
 lbd         = 1/3
 z           = 100
 gamma       = 1/8
@@ -32,8 +32,8 @@ verbose     = 1
 
 np.random.seed(123)
 
-# alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons']
-alg_to_run = ['ons', 'c_sgd']
+alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons']
+#alg_to_run = ['ons', 'c_sgd']
 
 
 ############################### Read and prepare data ###############################
@@ -68,7 +68,7 @@ if 'gd' in alg_to_run:
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, GDloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 # Constrained GD: projection on B1(z)
@@ -80,7 +80,7 @@ if 'c_gd' in alg_to_run:
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained GD (radius {:2d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, z, GDloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 # Unconstrained SGD
@@ -92,7 +92,7 @@ if 'sgd' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SGDloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 # Projected SGD
@@ -104,7 +104,7 @@ if 'c_sgd' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SGDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 if 'smd' in alg_to_run:
@@ -114,7 +114,7 @@ if 'smd' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SMD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SMDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SMDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 if 'seg' in alg_to_run:
@@ -124,7 +124,7 @@ if 'seg' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SEGloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SEGloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 if 'adagrad' in alg_to_run:
@@ -134,7 +134,7 @@ if 'adagrad' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Adagradloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Adagradloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 
 if 'ons' in alg_to_run: #try with rate instead of compute_accuracies

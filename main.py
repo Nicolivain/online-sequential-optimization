@@ -12,9 +12,9 @@ Main file
 import numpy as np
 import pandas as pd
 import pathlib as Path
+
 from Algorithms.Adam import adaMax, adaMaxTemporal, adam, adamP, adamTemporal, adamproj
 from Algorithms.Explo import sbeg, sreg
-
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
 from Algorithms.RFTL import adagrad, seg, smd
@@ -25,9 +25,9 @@ from utils import *
 # --- PARAMETERS ---
 
 lr = 0.1
-nepoch = 100
-lbd = 1
-z = 10
+nepoch = 50
+lbd = 1/3
+z = 100
 verbose = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
@@ -58,7 +58,7 @@ test_labels[np.where(test_labels != 0)] = -1
 test_labels[np.where(test_labels == 0)] = 1
 
 n, m = train_data.shape
-fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(5, 5))
+fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 10))
 
 ############################### Test algorithms ###############################
 
@@ -261,4 +261,5 @@ ax[1].set_yscale('log')
 # legend
 ax[0].legend(alg_to_run)
 ax[1].legend(alg_to_run)
+plt.savefig('LossAccuracies.jpg')
 plt.show()

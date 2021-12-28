@@ -8,7 +8,7 @@ def proj_simplex(vect):
     :param vect: vector of size (n)
     """
 
-    if sum([abs(vi) for vi in vect]) == 1:
+    if sum([abs(vi) for vi in vect]) <= 1:
         return vect
 
     nvc  = list(deepcopy(vect))
@@ -25,6 +25,8 @@ def proj_simplex(vect):
     soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in vect]  # we make sure to keep the sign
     return np.array(soft_threshold)
 
+
+
 def proj_l1(vect, z) : 
     """
     Projects the vector vect on the L1-ball
@@ -32,7 +34,7 @@ def proj_l1(vect, z) :
     :param z: radius of the l1-ball considered
     """
 
-    if (np.abs(vect) <= 1).sum():
+    if (np.abs(vect).sum() <= 1):
         return vect
     wstar = proj_simplex(np.abs(vect) / z)
     return np.sign(vect) * wstar # produit terme à terme

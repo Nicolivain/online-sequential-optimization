@@ -7,7 +7,7 @@ from Algorithms.Projector import weighted_proj_l1
 
 # TODO : use the mean to update the model (cf .R) because that's the interesting result and not value
 
-def ONS(model, X, y, epoch, l, gamma, z=1, verbose=0):
+def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
         :param X: (nxm) data

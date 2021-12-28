@@ -16,6 +16,7 @@ import pathlib as Path
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
 from Algorithms.RFTL import adagrad, seg, smd
+from Algorithms.ONS import ons
 from Models.LinearSVM import LinearSVM
 from utils import *
 
@@ -24,17 +25,18 @@ from utils import *
 
 lr          = 0.1
 nepoch      = 51
-lbd         = 1
+lbd         = 1/3
 z           = 10
+gamma       = 1/8
 verbose     = 1
 
-alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad']
+alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons']
 # alg_to_run = ['adagrad']
 
 
 ############################### Read and prepare data ###############################
 
-mnist_train=pd.read_csv('mnist_train.csv', sep=',', header=None)  # Reading
+mnist_train=pd.read_csv('mnist_train.csv', sep=',', header=None)     # Reading
 train_data = mnist_train.values[:, 1:]                               # Extract data
 train_data = train_data / np.max(train_data)                         # Normalize data
 train_data = np.c_[train_data, np.ones(train_data.shape[0])]         # Add intersept
@@ -130,6 +132,16 @@ if 'adagrad' in alg_to_run:
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Adagradloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Adagradloss)
+    accuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'ons' in alg_to_run:
+    model = LinearSVM(m)
+    Onsloss, wts = ons(model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, constrained ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Onsloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), Onsloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
 

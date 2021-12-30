@@ -8,10 +8,11 @@ Le Boudec Lise
 
 Main file 
 """
-
+import time
 import numpy as np
 import pandas as pd
 import pathlib as Path
+import seaborn as sns
 
 from Algorithms.Adam import adaMax, adaMaxTemporal, adam, adamP, adamTemporal, adamproj
 from Algorithms.Explo import sbeg, sreg
@@ -27,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 10000
+nepoch = 100
 lbd = 1/3
 z = 100
 gamma = 1/8
@@ -67,12 +68,16 @@ fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15, 10))
 
 ############################### Test algorithms ###############################
 
+time_dict = {}
+
 # Unconstrained GD
 
 if 'gd' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     GDloss, wts = GradientDescent(
         model, train_data, train_labels, lr, nepoch, lbd, verbose)
+    time_dict['gd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -87,8 +92,10 @@ if 'gd' in alg_to_run:
 
 if 'c_gd' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     GDprojloss, wts = projected_gd(
         model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    time_dict['c_gd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained GD (radius {:2d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -103,8 +110,10 @@ if 'c_gd' in alg_to_run:
 
 if 'sgd' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SGDloss, wts = sgd(model, train_data, train_labels,
                        lr, nepoch, lbd, verbose)
+    time_dict['sgd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -119,8 +128,10 @@ if 'sgd' in alg_to_run:
 
 if 'c_sgd' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SGDprojloss, wts = projected_sgd(
         model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    time_dict['c_sgd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -133,8 +144,10 @@ if 'c_sgd' in alg_to_run:
 
 if 'smd' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SMDprojloss, wts = smd(model, train_data, train_labels,
                            lr, nepoch, lbd, z, verbose)
+    time_dict['smd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SMD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -147,8 +160,10 @@ if 'smd' in alg_to_run:
 
 if 'seg' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SEGloss, wts = seg(model, train_data, train_labels,
                        lr, nepoch, lbd, z, verbose)
+    time_dict['seg'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -161,8 +176,10 @@ if 'seg' in alg_to_run:
 
 if 'adagrad' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     Adagradloss, wts = adagrad(
         model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
+    time_dict['adagrad'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -175,7 +192,9 @@ if 'adagrad' in alg_to_run:
 
 if 'ons' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     ONSloss, wts = ons(model, train_data, train_labels, nepoch, lbd, gamma, z, verbose)
+    time_dict['ons'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, ONSloss[-1], acc))
@@ -187,8 +206,10 @@ if 'ons' in alg_to_run:
 
 if 'sreg' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SREGloss, wts = sreg(model, train_data, train_labels,
                          lr, nepoch, lbd, z, verbose)
+    time_dict['sreg'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SREG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -201,8 +222,10 @@ if 'sreg' in alg_to_run:
 
 if 'sbeg' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     SBEGloss, wts = sbeg(model, train_data, train_labels,
                          lr, nepoch, lbd, z, verbose)
+    time_dict['sbeg'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, constrained SBEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -215,8 +238,10 @@ if 'sbeg' in alg_to_run:
 
 if 'adam' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     Adamloss, wts = adam(model, train_data, train_labels,
                          lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    time_dict['adam'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -230,8 +255,10 @@ if 'adam' in alg_to_run:
 
 if 'adamproj' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     AdamProjloss, wts = adamproj(
         model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    time_dict['adamproj'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, projected adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -245,8 +272,10 @@ if 'adamproj' in alg_to_run:
 if 'adamp' in alg_to_run:
     p = 3
     model = LinearSVM(m)
+    tic = time.time()
     AdamPloss, wts = adamP(model, train_data, train_labels,
                            lr, nepoch, lbd, z, [0.9, 0.999], p, verbose)
+    time_dict['adamp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, adam with norm L{:3d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -259,8 +288,10 @@ if 'adamp' in alg_to_run:
 
 if 'adamtemp' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     AdamTemploss, wts = adamTemporal(
         model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    time_dict['adamtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, adam with temporal averaging algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -273,8 +304,10 @@ if 'adamtemp' in alg_to_run:
 
 if 'adamax' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     AdaMaxLoss, wts = adaMax(model, train_data, train_labels, lr, nepoch, lbd, z, [
                              0.9, 0.999], verbose)
+    time_dict['adamax'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, AdaMax algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -287,8 +320,10 @@ if 'adamax' in alg_to_run:
 
 if 'adamaxtemp' in alg_to_run:
     model = LinearSVM(m)
+    tic = time.time()
     AdaMaxTempLoss, wts = adaMaxTemporal(
         model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+    time_dict['adamaxtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, AdaMax with temporal averaging algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
@@ -298,6 +333,7 @@ if 'adamaxtemp' in alg_to_run:
     ax[1].plot(AdaMaxTempaccuracies)
     AdaMaxTemperrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(AdaMaxTemperrors)
+
 
 # Log scale
 ax[0].set_xscale('log')
@@ -315,8 +351,15 @@ ax[0].set_title('Loss')
 ax[1].set_title('Accuracy')
 ax[2].set_title('Error')
 
-plt.savefig('LossAccuraciesErrors.jpg')
+plt.savefig('LossAccuraciesErrors.png')
 plt.show()
+
+plt.clf()
+keys = list(time_dict.keys())
+sns.barplot(x=keys, y=[time_dict[k] for k in keys])
+plt.savefig('execution_time.png')
+plt.show()
+
 
 # t = np.arange(nepoch)
 # fig = plt.figure()

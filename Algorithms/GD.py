@@ -18,7 +18,7 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
     losses = []
     wts = [model.w]
     for i in range(epoch):
-        t = i +1
+        t = i + 1
         lr = 1 / (l * t )
         new_wts = wts[-1] - lr * model.gradLoss(X, y, l)
         wts.append(new_wts)
@@ -46,9 +46,9 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
     losses = []
     wts = [model.w]
     for i in range(epoch):
-        t = i +1
-        lr = 1 / (l * t )
-        new_wts = model.w - lr * model.gradLoss(x, y, l)
+        t = i + 1
+        lr = 1 / (l * t)
+        new_wts = wts[-1] - lr * model.gradLoss(x, y, l)
         new_wts  = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts

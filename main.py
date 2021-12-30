@@ -25,13 +25,14 @@ from utils import *
 # --- PARAMETERS ---
 
 lr = 0.1
-nepoch = 51
+nepoch = 1000
 lbd = 1/3
 z = 100
 verbose = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
+# alg_to_run = ['gd', 'c_gd']
 
 ############################### Read and prepare data ###############################
 
@@ -86,8 +87,8 @@ if 'c_gd' in alg_to_run:
         model, train_data, train_labels, lr, nepoch, lbd, z, verbose)
     pred_test_labels = model.predict(test_data)
     GDacc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, constrained GD (radius {:2d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-        nepoch, z, GDloss[-1], GDacc))
+    print('After {:3d} epoch, constrained GD (radius {:2d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+        nepoch, z, GDprojloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDprojloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
@@ -232,7 +233,7 @@ if 'adamp' in alg_to_run:
                            lr, nepoch, lbd, z, [0.9, 0.999], p, verbose)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, adam with norm L{:3d}algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+    print('After {:3d} epoch, adam with norm L{:3d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, p, AdamPloss[-1], acc))
     ax[0].plot(np.arange(nepoch), AdamPloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)

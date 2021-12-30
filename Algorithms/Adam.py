@@ -160,7 +160,7 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         vtchap = vts/(1 - betas[1]**t)
 
         new_wts = wts[-1] - lr * mtchap / (np.sqrt(vtchap + 10e-8))
-        new_wts = weighted_proj_simplex(new_wts, np.diag(vts))
+        new_wts = proj_l1(new_wts, z, np.diag(vts), weighted=True)
         wts.append(new_wts)
         model.w = new_wts
 

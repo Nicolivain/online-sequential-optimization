@@ -130,7 +130,7 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
         Sts += model.gradLoss(sample_x, sample_y, l)**2
         Dt = np.diag(np.sqrt(Sts))
         yts = wts[-1] - np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
-        new_wts = weighted_proj_simplex(yts, Dt)
+        new_wts = proj_l1(yts, z, Dt, weighted=True)
         wts.append(new_wts)
         model.w = new_wts
 

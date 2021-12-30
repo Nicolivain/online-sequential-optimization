@@ -46,6 +46,7 @@ class LinearSVM:
         if b.shape != ():
             grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a  # reshape b to nxm to use term-by-term multiplication
         else:
+
             grad = -b * a  # no need for repeat if n=1
         grad[np.where(temp <= 0)] = 0
         return grad + l * self.w

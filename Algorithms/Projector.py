@@ -1,4 +1,7 @@
 import numpy as np
+from copy import deepcopy
+import math
+
 
 def proj_simplex(x):
     if sum([abs(vi) for vi in x]) <= 1:
@@ -35,6 +38,22 @@ def proj_l1(x,z=1,d=0,weighted=False):
             w = proj_simplex(abs(x)/z)
         return z*np.sign(x)*w
 
+
+def weighted_proj_l1(vect, w, z=1):
+    """Weighted projection on the l1-ball of
+    - vect of size (n)
+    - using weights w
+    - and the radius z of the l1-ball considered
+    """
+    if np.sum(np.abs(vect))>z & math.isinf(z) == False & math.isnan(z) == False:
+        v = np.abs(vect*w)
+        ind = np.argsort(-v)
+        sum_vect = np.cumsum(np.abs(vect)[ind])
+        sum_w = np.cumsum(1/w[ind])
+        rho = np.max(np.where(v[ind]>(sum_vect - z)/sum_w))
+        theta = (sum_vect[rho] - z) / sum_w[rho]
+        vect = np.sign(vect)*np.clip(np.abs(vect) - theta/w, 0, np.max(np.abs(vect) - theta/w))
+    return vect
 
 if __name__ == '__main__':
     # Unit Testing

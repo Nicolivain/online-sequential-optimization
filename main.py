@@ -18,16 +18,22 @@ from Algorithms.Explo import sbeg, sreg
 from Algorithms.GD import GradientDescent, projected_gd
 from Algorithms.SGD import sgd, projected_sgd
 from Algorithms.RFTL import adagrad, seg, smd
+from Algorithms.ONS import ons
 from Models.LinearSVM import LinearSVM
 from utils import *
 
 
 # --- PARAMETERS ---
 
+
+
+np.random.seed(123)
+
 lr = 0.1
 nepoch = 1000
 lbd = 1/3
 z = 100
+gamma = 1/8
 verbose = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
@@ -74,7 +80,7 @@ if 'gd' in alg_to_run:
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, GDloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -90,7 +96,7 @@ if 'c_gd' in alg_to_run:
     print('After {:3d} epoch, constrained GD (radius {:2d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, z, GDprojloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -106,7 +112,7 @@ if 'sgd' in alg_to_run:
     print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SGDloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -122,7 +128,7 @@ if 'c_sgd' in alg_to_run:
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SGDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -136,7 +142,7 @@ if 'smd' in alg_to_run:
     print('After {:3d} epoch, constrained SMD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SMDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SMDprojloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -150,7 +156,7 @@ if 'seg' in alg_to_run:
     print('After {:3d} epoch, constrained SEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SEGloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SEGloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)
@@ -164,7 +170,17 @@ if 'adagrad' in alg_to_run:
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, Adagradloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Adagradloss)
-    accuracies = compute_accuracies(wts, test_data, test_labels)
+    accuracies = rate(wts, test_data, test_labels)
+    ax[1].plot(accuracies)
+
+if 'ons' in alg_to_run: #try with rate instead of compute_accuracies
+    model = LinearSVM(m)
+    Onsloss, wts = ons(model, train_data, train_labels, nepoch, lbd, gamma, z, verbose)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, Onsloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), Onsloss)
+    accuracies = rate(wts, test_data, test_labels)
     ax[1].plot(accuracies)
     errors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(errors)

@@ -57,6 +57,17 @@ def compute_accuracies(wts, X, y_true):
         accs.append(acc)
     return accs
 
+def rate(wts, X, y):
+    """
+    wts : weights provided during the online fitting
+    X : test data
+    y : test labels
+    """
+    acc = []
+    for w in wts:
+        acc.append(np.mean(y*X.dot(w) > 0))
+    return acc
+    
 def compute_errors(wts, X, y_true):
     """
     Compute the accuracy wrt time of the provided predictions and data

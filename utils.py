@@ -57,3 +57,20 @@ def compute_accuracies(wts, X, y_true):
         accs.append(acc)
     return accs
 
+def compute_errors(wts, X, y_true):
+    """
+    Compute the accuracy wrt time of the provided predictions and data
+    wts (txm) : weigths at each time step of the algo
+    X (nxm) : data to be predicted
+    y_true (n) : true value to predict
+    """
+    errs = []
+    it, d = wts.shape
+    wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) # TODO : look if mean not usefull during algorithms also
+
+    for weigts in wts_mean:
+        y_pred = np.sign(X.dot(weigts))
+        err = 1 - accuracy(y_pred, y_true)
+        errs.append(err)
+    return errs
+

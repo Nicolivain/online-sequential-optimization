@@ -25,7 +25,7 @@ from utils import *
 # --- PARAMETERS ---
 
 lr = 0.1
-nepoch = 50
+nepoch = 51
 lbd = 1/3
 z = 100
 verbose = 1
@@ -58,7 +58,7 @@ test_labels[np.where(test_labels != 0)] = -1
 test_labels[np.where(test_labels == 0)] = 1
 
 n, m = train_data.shape
-fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(15, 10))
+fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15, 10))
 
 ############################### Test algorithms ###############################
 
@@ -75,6 +75,8 @@ if 'gd' in alg_to_run:
     ax[0].plot(np.arange(nepoch), GDloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 # Constrained GD: projection on B1(z)
 
@@ -89,6 +91,8 @@ if 'c_gd' in alg_to_run:
     ax[0].plot(np.arange(nepoch), GDprojloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 # Unconstrained SGD
 
@@ -103,6 +107,8 @@ if 'sgd' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SGDloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 # Projected SGD
 
@@ -117,6 +123,8 @@ if 'c_sgd' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SGDprojloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'smd' in alg_to_run:
     model = LinearSVM(m)
@@ -129,6 +137,8 @@ if 'smd' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SMDprojloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'seg' in alg_to_run:
     model = LinearSVM(m)
@@ -141,6 +151,8 @@ if 'seg' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SEGloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adagrad' in alg_to_run:
     model = LinearSVM(m)
@@ -153,6 +165,8 @@ if 'adagrad' in alg_to_run:
     ax[0].plot(np.arange(nepoch), Adagradloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'sreg' in alg_to_run:
     model = LinearSVM(m)
@@ -165,6 +179,8 @@ if 'sreg' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SREGloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'sbeg' in alg_to_run:
     model = LinearSVM(m)
@@ -177,6 +193,8 @@ if 'sbeg' in alg_to_run:
     ax[0].plot(np.arange(nepoch), SBEGloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adam' in alg_to_run:
     model = LinearSVM(m)
@@ -189,6 +207,8 @@ if 'adam' in alg_to_run:
     ax[0].plot(np.arange(nepoch), Adamloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 
 if 'adamproj' in alg_to_run:
@@ -202,6 +222,8 @@ if 'adamproj' in alg_to_run:
     ax[0].plot(np.arange(nepoch), AdamProjloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adamp' in alg_to_run:
     p = 3
@@ -215,6 +237,8 @@ if 'adamp' in alg_to_run:
     ax[0].plot(np.arange(nepoch), AdamPloss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adamtemp' in alg_to_run:
     model = LinearSVM(m)
@@ -227,6 +251,8 @@ if 'adamtemp' in alg_to_run:
     ax[0].plot(np.arange(nepoch), AdamTemploss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adamax' in alg_to_run:
     model = LinearSVM(m)
@@ -239,6 +265,8 @@ if 'adamax' in alg_to_run:
     ax[0].plot(np.arange(nepoch), AdaMaxLoss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 if 'adamaxtemp' in alg_to_run:
     model = LinearSVM(m)
@@ -251,15 +279,24 @@ if 'adamaxtemp' in alg_to_run:
     ax[0].plot(np.arange(nepoch), AdaMaxTempLoss)
     accuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(accuracies)
+    errors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(errors)
 
 # Log scale
 ax[0].set_xscale('log')
 ax[0].set_yscale('log')
 ax[1].set_xscale('log')
 ax[1].set_yscale('log')
+ax[2].set_xscale('log')
+ax[2].set_yscale('log')
 
 # legend
 ax[0].legend(alg_to_run)
 ax[1].legend(alg_to_run)
-plt.savefig('LossAccuracies.jpg')
+ax[2].legend(alg_to_run)
+ax[0].set_title('Loss')
+ax[1].set_title('Accuracy')
+ax[2].set_title('Error')
+
+plt.savefig('LossAccuraciesErrors.jpg')
 plt.show()

@@ -13,9 +13,9 @@ class LinearSVM:
         l (float ): regularization parameter (lambda)
         """
 
-        temp = 1 - (a.dot(self.w) * b)
-        temp[np.where(temp <= 0)] = 0
-        return np.mean(temp) + l / 2 * np.linalg.norm(self.w, 2)**2
+        hinge = 1 - (a.dot(self.w) * b)
+        hinge[np.where(hinge <= 0)] = 0
+        return np.mean(hinge) + l / 2 * np.linalg.norm(self.w, 2)**2
 
     def gradLoss(self, a, b, l):
         """
@@ -25,11 +25,12 @@ class LinearSVM:
         b (n) : labels
         l (float) : regularization parameter (lambda)"""
 
-        temp = 1 - a.dot(self.w)
         if b.shape != ():
             grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a  # reshape b to nxm to use term-by-term multiplication
         else:
             grad = -b * a  # no need for repeat if n=1
+
+        temp = 1 - (a.dot(self.w) * b)
         grad[np.where(temp <= 0)] = 0
         return np.mean(grad, 0) + l * self.w
 

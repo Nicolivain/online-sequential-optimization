@@ -3,67 +3,40 @@ from copy import deepcopy
 import math
 
 
-def proj_simplex(vect):
+def proj_simplex(x):
+    if sum([abs(vi) for vi in x]) <= 1:
+        return x
+    x_s = np.sort(x, kind='quicksort')[::-1]
+    cum_s = np.cumsum(x_s)
+    res = x_s - (cum_s-1)/(np.arange(len(x))+1)
+    d0 = np.max(np.where(res>0)[0]) + 1 #because index start at 0 
+    theta = (cum_s[d0-1] -1)/d0
+
+    return np.maximum(0,x-theta)
+
+def weighted_proj_simplex(x,D):
     """
-    Projects the vector vect on the simplex
-    :param vect: vector of size (n)
+    x : vector, D : diag matrix
     """
+    dx = np.abs(np.dot(D,x))
+    sorted_indices = np.argsort(-dx, kind='quicksort')
+    sx = np.cumsum(x[sorted_indices])
+    sd = np.cumsum(1/np.diag(D)[sorted_indices])
+    res = dx[sorted_indices] - (sx-1)/sd
+    d0 = np.max(np.where(res>0)[0])
+    theta = (sx[d0]-1)/sd[d0]
 
-    if sum([abs(vi) for vi in vect]) == 1:
-        return vect
+    return np.dot(np.linalg.inv(D),np.maximum(0,dx-theta))
 
-    nvc  = list(deepcopy(vect))
-    topk = [nvc.pop(np.argmax(vect).min())]  # min in case of equality eg len(argmax)>1
-    d0 = 1
-    while nvc[np.argmax(nvc)] > 1/d0 * (sum(topk) - 1):
-        topk.append(nvc.pop(np.argmax(nvc).min()))
-        d0 += 1
-        if d0 > len(vect) - 1:
-            break
-
-    theta = 1/d0 * (sum(topk) - 1)
-
-    soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in vect]  # we make sure to keep the sign
-    return np.array(soft_threshold)
-
-def proj_l1(vect, z) : 
-    """
-    Projects the vector vect on the L1-ball
-    :param vect: vector of size (n)
-    :param z: radius of the l1-ball considered
-    """
-
-    if np.abs(vect).sum()<=1:
-        return vect
-    wstar = proj_simplex(np.abs(vect) / z)
-    return np.sign(vect) * wstar # produit terme à terme
-
-def weighted_proj_simplex(vect, weight):
-    """
-    Projects the vector vect on the simplex
-    :param vect: vector of size (n)
-    """
-
-    if sum([abs(vi) for vi in vect]) == 1:
-        return vect
-
-    Dx = weight.dot(vect)
-    nvc  = list(deepcopy(Dx))
-    topk = [nvc.pop(np.argmax(Dx).min())]  # min in case of equality eg len(argmax)>1
-    d0 = 1
-    Dsorted = np.sort(np.diag(weight))
-    sumd0 = np.sum(Dsorted[0:d0])
-    while nvc[np.argmax(nvc)] > 1/sumd0 * (sum(topk) - 1):
-        topk.append(nvc.pop(np.argmax(nvc).min()))
-        d0 += 1
-        sumd0 = np.sum(Dsorted[0:d0])
-        if d0 > len(Dx) - 1:
-            break
-
-    theta = 1/sumd0 * (sum(topk) - 1)
-
-    soft_threshold = [vi/abs(vi) * max(vi-theta, 0) if vi != 0 else 0 for vi in Dx]  # we make sure to keep the sign
-    return np.linalg.inv(weight).dot(np.array(soft_threshold))
+def proj_l1(x,z=1,d=0,weighted=False):
+    if sum(abs(x)) <= z:
+        return x
+    else:
+        if weighted:
+            w = weighted_proj_simplex(abs(x)/z,d)
+        else :
+            w = proj_simplex(abs(x)/z)
+        return z*np.sign(x)*w
 
 
 def weighted_proj_l1(vect, w, z=1):

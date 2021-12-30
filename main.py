@@ -27,7 +27,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 50
+nepoch = 10000
 lbd = 1/3
 z = 100
 gamma = 1/8
@@ -35,6 +35,8 @@ verbose = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
+
+alg_to_run = ['ons', 'c_sgd']
 
 ############################### Read and prepare data ###############################
 
@@ -76,7 +78,7 @@ if 'gd' in alg_to_run:
     print('After {:3d} epoch, Unconstrained GD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, GDloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDloss)
-    GDaccuracies = rate(wts, test_data, test_labels)
+    GDaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(GDaccuracies)
     GDerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(GDerrors)
@@ -92,9 +94,9 @@ if 'c_gd' in alg_to_run:
     print('After {:3d} epoch, constrained GD (radius {:2d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, z, GDprojloss[-1], GDacc))
     ax[0].plot(np.arange(nepoch), GDprojloss)
-    GDprojaccuracies = rate(wts, test_data, test_labels)
+    GDprojaccuracies = compute_accuracies(wts, test_data, test_labels, average=False) #no average for gd
     ax[1].plot(GDprojaccuracies)
-    GDprojerrors = compute_errors(wts, test_data, test_labels)
+    GDprojerrors = compute_errors(wts, test_data, test_labels, average=False)
     ax[2].plot(GDprojerrors)
 
 # Unconstrained SGD
@@ -108,7 +110,7 @@ if 'sgd' in alg_to_run:
     print('After {:3d} epoch, Unconstrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SGDloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDloss)
-    SGDaccuracies = rate(wts, test_data, test_labels)
+    SGDaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(SGDaccuracies)
     SGDerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SGDerrors)
@@ -124,7 +126,7 @@ if 'c_sgd' in alg_to_run:
     print('After {:3d} epoch, constrained SGD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SGDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SGDprojloss)
-    SGDprojaccuracies = rate(wts, test_data, test_labels)
+    SGDprojaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(SGDprojaccuracies)
     SGDprojerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SGDprojerrors)
@@ -138,7 +140,7 @@ if 'smd' in alg_to_run:
     print('After {:3d} epoch, constrained SMD algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SMDprojloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SMDprojloss)
-    SMDprojaccuracies = rate(wts, test_data, test_labels)
+    SMDprojaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(SMDprojaccuracies)
     SMDprojerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SMDprojerrors)
@@ -152,7 +154,7 @@ if 'seg' in alg_to_run:
     print('After {:3d} epoch, constrained SEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, SEGloss[-1], acc))
     ax[0].plot(np.arange(nepoch), SEGloss)
-    SEGaccuracies = rate(wts, test_data, test_labels)
+    SEGaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(SEGaccuracies)
     SEGerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SEGerrors)
@@ -166,19 +168,19 @@ if 'adagrad' in alg_to_run:
     print('After {:3d} epoch, constrained Adagrad algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
         nepoch, Adagradloss[-1], acc))
     ax[0].plot(np.arange(nepoch), Adagradloss)
-    Adagradaccuracies = rate(wts, test_data, test_labels)
+    Adagradaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(Adagradaccuracies)
     Adagraderrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(Adagraderrors)
 
-if 'ons' in alg_to_run: #try with rate instead of compute_accuracies
+if 'ons' in alg_to_run:
     model = LinearSVM(m)
     ONSloss, wts = ons(model, train_data, train_labels, nepoch, lbd, gamma, z, verbose)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
     print('After {:3d} epoch, ONS algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, ONSloss[-1], acc))
     ax[0].plot(np.arange(nepoch), ONSloss)
-    ONSaccuracies = rate(wts, test_data, test_labels)
+    ONSaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(ONSaccuracies)
     ONSerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(ONSerrors)
@@ -316,67 +318,67 @@ ax[2].set_title('Error')
 plt.savefig('LossAccuraciesErrors.jpg')
 plt.show()
 
-t = np.arange(nepoch)
-fig = plt.figure()
-plt.plot(t, GDloss, 
-        t, GDprojloss, 
-        t, SGDloss, 
-        t, SGDprojloss, 
-        t, SMDprojloss, 
-        t, SEGloss, 
-        t, Adagradloss, 
-        t, ONSloss, 
-        t, SREGloss, 
-        t, SBEGloss, 
-        t, Adamloss, 
-        t, AdamProjloss, 
-        t, AdamPloss, 
-        t, AdamTemploss, 
-        t, AdaMaxLoss, 
-        t, AdaMaxTempLoss)
-plt.legend(alg_to_run)
-plt.savefig('Losses.jpg')
-plt.show()
-
-t = np.arange(nepoch + 1)
-fig = plt.figure()
-plt.plot(t, GDaccuracies, 
-        t, GDprojaccuracies, 
-        t, SGDaccuracies, 
-        t, SGDprojaccuracies, 
-        t, SMDprojaccuracies, 
-        t, SEGaccuracies, 
-        t, Adagradaccuracies, 
-        t, ONSaccuracies, 
-        t, SREGaccuracies, 
-        t, SBEGaccuracies, 
-        t, Adamaccuracies, 
-        t, AdamProjaccuracies, 
-        t, AdamPaccuracies, 
-        t, AdamTempaccuracies, 
-        t, AdaMaxaccuracies, 
-        t, AdaMaxTempaccuracies)
-plt.legend(alg_to_run)
-plt.savefig('Accuracies.jpg')
-plt.show()
-
-fig = plt.figure()
-plt.plot(t, GDerrors, 
-        t, GDprojerrors, 
-        t, SGDerrors, 
-        t, SGDprojerrors, 
-        t, SMDprojerrors, 
-        t, SEGerrors, 
-        t, Adagraderrors, 
-        t, ONSerrors, 
-        t, SREGerrors, 
-        t, SBEGerrors, 
-        t, Adamerrors, 
-        t, AdamProjerrors, 
-        t, AdamPerrors, 
-        t, AdamTemperrors, 
-        t, AdaMaxerrors, 
-        t, AdaMaxTemperrors)
-plt.legend(alg_to_run)
-plt.savefig('Errors.jpg')
-plt.show()
+# t = np.arange(nepoch)
+# fig = plt.figure()
+# plt.plot(t, GDloss,
+#         t, GDprojloss,
+#         t, SGDloss,
+#         t, SGDprojloss,
+#         t, SMDprojloss,
+#         t, SEGloss,
+#         t, Adagradloss,
+#         t, ONSloss,
+#         t, SREGloss,
+#         t, SBEGloss,
+#         t, Adamloss,
+#         t, AdamProjloss,
+#         t, AdamPloss,
+#         t, AdamTemploss,
+#         t, AdaMaxLoss,
+#         t, AdaMaxTempLoss)
+# plt.legend(alg_to_run)
+# plt.savefig('Losses.jpg')
+# plt.show()
+#
+# t = np.arange(nepoch + 1)
+# fig = plt.figure()
+# plt.plot(t, GDaccuracies,
+#         t, GDprojaccuracies,
+#         t, SGDaccuracies,
+#         t, SGDprojaccuracies,
+#         t, SMDprojaccuracies,
+#         t, SEGaccuracies,
+#         t, Adagradaccuracies,
+#         t, ONSaccuracies,
+#         t, SREGaccuracies,
+#         t, SBEGaccuracies,
+#         t, Adamaccuracies,
+#         t, AdamProjaccuracies,
+#         t, AdamPaccuracies,
+#         t, AdamTempaccuracies,
+#         t, AdaMaxaccuracies,
+#         t, AdaMaxTempaccuracies)
+# plt.legend(alg_to_run)
+# plt.savefig('Accuracies.jpg')
+# plt.show()
+#
+# fig = plt.figure()
+# plt.plot(t, GDerrors,
+#         t, GDprojerrors,
+#         t, SGDerrors,
+#         t, SGDprojerrors,
+#         t, SMDprojerrors,
+#         t, SEGerrors,
+#         t, Adagraderrors,
+#         t, ONSerrors,
+#         t, SREGerrors,
+#         t, SBEGerrors,
+#         t, Adamerrors,
+#         t, AdamProjerrors,
+#         t, AdamPerrors,
+#         t, AdamTemperrors,
+#         t, AdaMaxerrors,
+#         t, AdaMaxTemperrors)
+# plt.legend(alg_to_run)
+# plt.savefig('Errors.jpg')
+# plt.show()

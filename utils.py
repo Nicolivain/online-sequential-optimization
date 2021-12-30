@@ -40,16 +40,19 @@ def plot_loss(loss, graph_title=None):
             ax = plt.plot(idx, vals, title=graph_title, legend=key)
         return ax
 
-def compute_accuracies(wts, X, y_true):
+def compute_accuracies(wts, X, y_true, average = True):
     """
-    Compute the accuracy wrt time of the provided predictions and data
+    This function computes the accuracy using averaged weights
     wts (txm) : weigths at each time step of the algo
     X (nxm) : data to be predicted
     y_true (n) : true value to predict
     """
     accs = []
     it, d = wts.shape
-    wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) # TODO : look if mean not usefull during algorithms also
+    if average == True :
+        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) #here we compute the online mean weights
+    else :
+        wts_mean = wts
 
     for weigts in wts_mean:
         y_pred = np.sign(X.dot(weigts))
@@ -59,6 +62,7 @@ def compute_accuracies(wts, X, y_true):
 
 def rate(wts, X, y):
     """
+    This function computes the accuracy using the actual weights (not averaged through time)
     wts : weights provided during the online fitting
     X : test data
     y : test labels
@@ -68,16 +72,20 @@ def rate(wts, X, y):
         acc.append(np.mean(y*X.dot(w) > 0))
     return acc
     
-def compute_errors(wts, X, y_true):
+def compute_errors(wts, X, y_true, average = True):
     """
     Compute the accuracy wrt time of the provided predictions and data
     wts (txm) : weigths at each time step of the algo
     X (nxm) : data to be predicted
     y_true (n) : true value to predict
     """
+
     errs = []
     it, d = wts.shape
-    wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) # TODO : look if mean not usefull during algorithms also
+    if average == True :
+        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])
+    else :
+        wts_mean = wts
 
     for weigts in wts_mean:
         y_pred = np.sign(X.dot(weigts))

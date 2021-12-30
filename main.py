@@ -30,7 +30,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 1000
+nepoch = 50
 lbd = 1/3
 z = 100
 gamma = 1/8

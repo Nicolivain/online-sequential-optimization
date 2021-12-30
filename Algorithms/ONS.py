@@ -20,7 +20,7 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         """
 
     losses = []
-    wts = [np.zeros(len(model.w))]
+    wts = [model.w]
     n, _ = X.shape
     d = len(wts[-1])
     A = np.diag([1 / gamma**2 for i in range(d)])
@@ -54,4 +54,4 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
 
     # update wts:
     model.w = np.mean(wts, axis=0)
-    return losses, wts
+    return losses, np.array(wts)

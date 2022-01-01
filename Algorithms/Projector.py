@@ -1,7 +1,5 @@
 import numpy as np
-from copy import deepcopy
 import math
-
 
 def proj_simplex(x):
     if sum([abs(vi) for vi in x]) <= 1:
@@ -28,7 +26,7 @@ def weighted_proj_simplex(x,D):
 
     return np.dot(np.linalg.inv(D),np.maximum(0,dx-theta))
 
-def proj_l1(x,z=1,d=0,weighted=False):
+def proj_l1(x, z=1, d=0, weighted=False):
     if sum(abs(x)) <= z:
         return x
     else:
@@ -37,7 +35,6 @@ def proj_l1(x,z=1,d=0,weighted=False):
         else :
             w = proj_simplex(abs(x)/z)
         return z*np.sign(x)*w
-
 
 def weighted_proj_l1(vect, w, z=1):
     """Weighted projection on the l1-ball of

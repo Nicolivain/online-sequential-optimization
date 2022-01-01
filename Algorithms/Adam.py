@@ -4,7 +4,8 @@ https://arxiv.org/pdf/1412.6980.pdf
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import *
+
+from Algorithms.Projector import weighted_proj_l1
 
 
 def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptative_lr=True):

@@ -1,8 +1,6 @@
 import numpy as np
 import math
 
-
-
 # def proj_simplex(x):
 #     if sum([abs(vi) for vi in x]) <= 1:
 #         return x

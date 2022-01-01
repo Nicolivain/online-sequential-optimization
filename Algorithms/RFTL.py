@@ -3,7 +3,7 @@ This file contains functions for gradient descent algorithm applied at the SVM p
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import proj_l1, weighted_proj_simplex
+from Algorithms.Projector import *
 
 # TODO : use the mean to update the model (cf .R) because that's the interesting result and not value 
 
@@ -130,7 +130,7 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
         Sts += model.gradLoss(sample_x, sample_y, l)**2
         Dt = np.diag(np.sqrt(Sts))
         yts = wts[-1] - np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
-        new_wts = proj_l1(yts, z, Dt, weighted=True)
+        new_wts = weighted_proj_l1(yts, np.diag(Dt), z)
         wts.append(new_wts)
         model.w = new_wts
 

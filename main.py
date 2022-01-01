@@ -28,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 100
+nepoch = 1000
 lbd = 1/3
 z = 100
 gamma = 1/8
@@ -37,7 +37,7 @@ verbose = 1
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-alg_to_run = ['ons', 'c_sgd']
+alg_to_run = ['ons', 'c_sgd', 'adagrad']
 
 ############################### Read and prepare data ###############################
 

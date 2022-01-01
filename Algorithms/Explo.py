@@ -3,7 +3,7 @@ This file contains functions for Exploration algorithm applied at the SVM proble
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import proj_l1, weighted_proj_simplex
+from Algorithms.Projector import *
 
 
 def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):

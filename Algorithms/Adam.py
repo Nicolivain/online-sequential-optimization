@@ -4,7 +4,7 @@ https://arxiv.org/pdf/1412.6980.pdf
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import proj_l1, weighted_proj_simplex
+from Algorithms.Projector import *
 
 
 def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptative_lr=True):
@@ -165,7 +165,7 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         vtchap = vts/(1 - betas[1]**t)
 
         new_wts = wts[-1] - lr * mtchap / (np.sqrt(vtchap + 10e-8))
-        new_wts = proj_l1(new_wts, z, np.diag(vts), weighted=True)
+        new_wts = weighted_proj_l1(new_wts, vts, z)
         wts.append(new_wts)
         model.w = new_wts
 

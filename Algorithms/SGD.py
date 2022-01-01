@@ -3,7 +3,7 @@ This file contains functions for gradient descent algorithm applied at the SVM p
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import proj_l1
+from Algorithms.Projector import *
 
 
 def sgd(model, X, y, lr, epoch, l, verbose=0):

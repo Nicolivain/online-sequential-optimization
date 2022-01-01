@@ -37,8 +37,6 @@ verbose = 1
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-alg_to_run = ['adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp', 'adam_fixlr']
-              
 
 ############################### Read and prepare data ###############################
 

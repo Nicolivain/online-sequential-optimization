@@ -7,7 +7,7 @@ import numpy as np
 from Algorithms.Projector import *
 
 
-def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptative_lr=True):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -22,6 +22,7 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     """
 
     n, d = X.shape
+    at = lr
     losses = []
     wts = [1 / (2*d) * np.zeros(d)]
     mts = np.zeros(d)
@@ -46,7 +47,11 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
-        new_wts = wts[-1] - lr * mtchap / (np.sqrt(vtchap) + 10e-8)
+        if adaptative_lr:
+            at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t) 
+            # at = 1/np.sqrt(t)
+
+        new_wts = wts[-1] - at * mtchap / (np.sqrt(vtchap) + 10e-8)
         wts.append(new_wts)
         model.w = new_wts
 
@@ -254,6 +259,7 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     vt_1s = np.zeros(d)
     tetats = np.zeros(d)
     tetat_1s = np.zeros(d)
+    tetatbar_1s = np.zeros(d)
 
     for i in range(epoch):
 
@@ -273,8 +279,9 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         vtchap = vts/(1 - betas[1]**t)
 
         tetats = tetat_1s - lr * mtchap / (np.sqrt(vtchap) + 10e-8)
-        new_wts = (betas[1] * tetat_1s + (1 - betas[1])
-                   * tetats) / (1 - betas[1]**t)
+        tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1])
+                   * tetats)
+        new_wts = tetatbar / (1 - betas[1]**t)
 
         wts.append(new_wts)
         model.w = new_wts
@@ -286,6 +293,7 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         mt_1s = mts
         vt_1s = vts
         tetat_1s = tetats
+        tetatbar_1s = tetatbar
 
         if verbose > 0 and i % verbose == 0:
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))

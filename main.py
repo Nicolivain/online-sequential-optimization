@@ -35,9 +35,8 @@ gamma = 1/8
 verbose = 1
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
-              'sreg', 'sbeg', 'adam', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
+              'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-alg_to_run = ['ons', 'c_sgd', 'adagrad']
 
 ############################### Read and prepare data ###############################
 
@@ -236,6 +235,8 @@ if 'sbeg' in alg_to_run:
     SBEGerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SBEGerrors)
 
+lr = 0.003
+
 if 'adam' in alg_to_run:
     model = LinearSVM(m)
     tic = time.time()
@@ -251,6 +252,22 @@ if 'adam' in alg_to_run:
     ax[1].plot(Adamaccuracies)
     Adamerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(Adamerrors)
+
+if 'adam_fixlr' in alg_to_run:
+    model = LinearSVM(m)
+    tic = time.time()
+    AdamLRloss, wts = adam(model, train_data, train_labels,
+                         lr, nepoch, lbd, z, [0.9, 0.999], verbose, adaptative_lr=False)
+    time_dict['adam_fixlr'] = (time.time() - tic)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, adam with fixed lr algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+        nepoch, AdamLRloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), AdamLRloss)
+    AdamLRaccuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(AdamLRaccuracies)
+    AdamLRerrors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(AdamLRerrors)
 
 
 if 'adamproj' in alg_to_run:
@@ -361,67 +378,74 @@ plt.savefig('execution_time.png')
 plt.show()
 
 
-# t = np.arange(nepoch)
-# fig = plt.figure()
-# plt.plot(t, GDloss,
-#         t, GDprojloss,
-#         t, SGDloss,
-#         t, SGDprojloss,
-#         t, SMDprojloss,
-#         t, SEGloss,
-#         t, Adagradloss,
-#         t, ONSloss,
-#         t, SREGloss,
-#         t, SBEGloss,
-#         t, Adamloss,
-#         t, AdamProjloss,
-#         t, AdamPloss,
-#         t, AdamTemploss,
-#         t, AdaMaxLoss,
-#         t, AdaMaxTempLoss)
-# plt.legend(alg_to_run)
-# plt.savefig('Losses.jpg')
-# plt.show()
-#
-# t = np.arange(nepoch + 1)
-# fig = plt.figure()
-# plt.plot(t, GDaccuracies,
-#         t, GDprojaccuracies,
-#         t, SGDaccuracies,
-#         t, SGDprojaccuracies,
-#         t, SMDprojaccuracies,
-#         t, SEGaccuracies,
-#         t, Adagradaccuracies,
-#         t, ONSaccuracies,
-#         t, SREGaccuracies,
-#         t, SBEGaccuracies,
-#         t, Adamaccuracies,
-#         t, AdamProjaccuracies,
-#         t, AdamPaccuracies,
-#         t, AdamTempaccuracies,
-#         t, AdaMaxaccuracies,
-#         t, AdaMaxTempaccuracies)
-# plt.legend(alg_to_run)
-# plt.savefig('Accuracies.jpg')
-# plt.show()
-#
-# fig = plt.figure()
-# plt.plot(t, GDerrors,
-#         t, GDprojerrors,
-#         t, SGDerrors,
-#         t, SGDprojerrors,
-#         t, SMDprojerrors,
-#         t, SEGerrors,
-#         t, Adagraderrors,
-#         t, ONSerrors,
-#         t, SREGerrors,
-#         t, SBEGerrors,
-#         t, Adamerrors,
-#         t, AdamProjerrors,
-#         t, AdamPerrors,
-#         t, AdamTemperrors,
-#         t, AdaMaxerrors,
-#         t, AdaMaxTemperrors)
-# plt.legend(alg_to_run)
-# plt.savefig('Errors.jpg')
-# plt.show()
+t = np.arange(nepoch)
+fig = plt.figure()
+plt.plot(t, GDloss,
+        t, GDprojloss,
+        t, SGDloss,
+        t, SGDprojloss,
+        t, SMDprojloss,
+        t, SEGloss,
+        t, Adagradloss,
+        t, ONSloss,
+        t, SREGloss,
+        t, SBEGloss,
+        t, Adamloss,
+        t, AdamLRloss, 
+        t, AdamProjloss,
+        t, AdamPloss,
+        t, AdamTemploss,
+        t, AdaMaxLoss,
+        t, AdaMaxTempLoss)
+plt.legend(alg_to_run)
+plt.savefig('Losses.jpg')
+plt.show()
+
+t = np.arange(nepoch + 1)
+fig = plt.figure()
+plt.plot(t, GDaccuracies,
+        t, GDprojaccuracies,
+        t, SGDaccuracies,
+        t, SGDprojaccuracies,
+        t, SMDprojaccuracies,
+        t, SEGaccuracies,
+        t, Adagradaccuracies,
+        t, ONSaccuracies,
+        t, SREGaccuracies,
+        t, SBEGaccuracies,
+        t, Adamaccuracies,
+        t, AdamLRaccuracies,
+        t, AdamProjaccuracies,
+        t, AdamPaccuracies,
+        t, AdamTempaccuracies,
+        t, AdaMaxaccuracies,
+        t, AdaMaxTempaccuracies)
+plt.legend(alg_to_run)
+plt.xscale('log')
+plt.yscale('log')
+plt.savefig('Accuracies.jpg')
+plt.show()
+
+fig = plt.figure()
+plt.plot(t, GDerrors,
+        t, GDprojerrors,
+        t, SGDerrors,
+        t, SGDprojerrors,
+        t, SMDprojerrors,
+        t, SEGerrors,
+        t, Adagraderrors,
+        t, ONSerrors,
+        t, SREGerrors,
+        t, SBEGerrors,
+        t, Adamerrors,
+        t, AdamLRerrors,
+        t, AdamProjerrors,
+        t, AdamPerrors,
+        t, AdamTemperrors,
+        t, AdaMaxerrors,
+        t, AdaMaxTemperrors)
+plt.legend(alg_to_run)
+plt.xscale('log')
+plt.yscale('log')
+plt.savefig('Errors.jpg')
+plt.show()

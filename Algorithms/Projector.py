@@ -1,6 +1,6 @@
 import numpy as np
-from copy import deepcopy
 import math
+
 
 
 # def proj_simplex(x):
@@ -38,6 +38,7 @@ import math
 #             w = proj_simplex(abs(x)/z)
 #         return z*np.sign(x)*w
 
+
 def proj_simplex(v, z=1):
     u = np.sort(v)
     su = np.cumsum(u)
@@ -54,7 +55,6 @@ def proj_l1(vect,z=1):
         u = proj_simplex(v,z)
         vect = np.sign(vect)*u
     return vect
-
 
 def weighted_proj_l1(vect, w, z=1):
     """Weighted projection on the l1-ball of

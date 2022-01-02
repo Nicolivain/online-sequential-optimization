@@ -34,7 +34,7 @@ def smd(model, X, y, epoch, l, z=1, lr=1, verbose=0):
         t = i + 1
         dlr = lr / np.sqrt(t)
         new_wts = wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
-        new_wts  = proj_l1(new_wts, z)
+        new_wts = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts
 

@@ -1,21 +1,18 @@
-"""
-This file contains functions for gradient descent algorithm applied at the SVM problem
-"""
 import random as rd
-import numpy as np
 from Algorithms.Projector import *
+import numpy as np
 
 
 def sgd(model, X, y, epoch, l, verbose=0, lr=1):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param model: the model
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param verbose: (int) print epoch results every n epochs
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param verbose: (int) print epoch results every n epochs
     """
 
     losses = []
@@ -50,16 +47,16 @@ def sgd(model, X, y, epoch, l, verbose=0, lr=1):
 
 def projected_sgd(model, X, y, epoch, l, z=1, verbose=0, lr=1):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param model: the model
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) = 1 so that it is fixed to 1/(lambda*t) in the descent step
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius for projection on the l1-ball
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) = 1 so that it is fixed to 1/(lambda*t) in the descent step
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius for projection on the l1-ball
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     losses = []
     wts = [model.w]

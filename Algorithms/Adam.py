@@ -8,7 +8,7 @@ import numpy as np
 from Algorithms.Projector import weighted_proj_l1
 
 
-def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptative_lr=True):
+def adam(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0, adaptative_lr=True):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -17,9 +17,9 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptati
     :param lr: (float) learning rate
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
     :param betas:(1x2) exponential decay rates for the moment estimates
     :param verbose: (int) print epoch results every n epochs
+    :param adaptative_lr: (bool) use the adam adaptative lr or not
     """
 
     n, d = X.shape
@@ -41,16 +41,13 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptati
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = betas[1] * vt_1s + (1 - betas[1]) * \
-            model.gradLoss(sample_x, sample_y, l)**2
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
         if adaptative_lr:
             at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t)
-            # at = 1/np.sqrt(t)
 
         new_wts = wts[-1] - at * mtchap / (np.sqrt(vtchap) + 10e-8)
         wts.append(new_wts)
@@ -69,7 +66,7 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptati
     return losses, np.array(wts)
 
 
-def adamP(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], p=2, verbose=0):
+def adam_p(model, X, y, lr, epoch, l, betas=[0.9, 0.999], p=2, verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -78,7 +75,6 @@ def adamP(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], p=2, verbose=0):
     :param lr: (float) learning rate
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
     :param betas:(1x2) exponential decay rates for the moment estimates
     :param p: (int) norm to be considered (1 <= p )
     :param verbose: (int) print epoch results every n epochs
@@ -102,10 +98,8 @@ def adamP(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], p=2, verbose=0):
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = betas[1]**p * vt_1s + (1 - betas[1]**p) * \
-            np.abs(model.gradLoss(sample_x, sample_y, l))**p
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1]**p * vt_1s + (1 - betas[1]**p) * np.abs(model.gradLoss(sample_x, sample_y, l))**p
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
@@ -126,7 +120,7 @@ def adamP(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], p=2, verbose=0):
     return losses, np.array(wts)
 
 
-def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adam_proj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -158,10 +152,8 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = betas[1] * vt_1s + (1 - betas[1]) * \
-            model.gradLoss(sample_x, sample_y, l)**2
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
@@ -183,7 +175,7 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adaMax(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adamax(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -192,7 +184,6 @@ def adaMax(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     :param lr: (float) learning rate
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
     :param betas:(1x2) exponential decay rates for the moment estimates
     :param verbose: (int) print epoch results every n epochs
     """
@@ -215,10 +206,8 @@ def adaMax(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = np.maximum(betas[1] * vt_1s,
-                         np.abs(model.gradLoss(sample_x, sample_y, l)))
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = np.maximum(betas[1] * vt_1s, np.abs(model.gradLoss(sample_x, sample_y, l)))
 
         new_wts = wts[-1] - lr / (1 - betas[0]**t) * mts / vts
         wts.append(new_wts)
@@ -237,7 +226,7 @@ def adaMax(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adam_temporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -246,7 +235,6 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     :param lr: (float) learning rate
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
     :param betas:(1x2) exponential decay rates for the moment estimates
     :param verbose: (int) print epoch results every n epochs
     """
@@ -272,16 +260,13 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = betas[1] * vt_1s + (1 - betas[1]) * \
-            model.gradLoss(sample_x, sample_y, l)**2
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
         tetats = tetat_1s - lr * mtchap / (np.sqrt(vtchap) + 10e-8)
-        tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1])
-                    * tetats)
+        tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1]) * tetats)
         new_wts = tetatbar / (1 - betas[1]**t)
 
         wts.append(new_wts)
@@ -302,7 +287,7 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adaMaxTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adamax_temporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -311,7 +296,6 @@ def adaMaxTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0
     :param lr: (float) learning rate
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
     :param betas:(1x2) exponential decay rates for the moment estimates
     :param verbose: (int) print epoch results every n epochs
     """
@@ -336,14 +320,11 @@ def adaMaxTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = np.maximum(betas[1] * vt_1s,
-                         np.abs(model.gradLoss(sample_x, sample_y, l)))
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = np.maximum(betas[1] * vt_1s, np.abs(model.gradLoss(sample_x, sample_y, l)))
 
         tetats = tetat_1s - lr / (1 - betas[0]**t) * mts / vts
-        new_wts = (betas[1] * tetat_1s + (1 - betas[1])
-                   * tetats) / (1 - betas[1]**t)
+        new_wts = (betas[1] * tetat_1s + (1 - betas[1])  * tetats) / (1 - betas[1]**t)
 
         wts.append(new_wts)
         model.w = new_wts

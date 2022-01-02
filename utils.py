@@ -51,10 +51,10 @@ def compute_accuracies(wts, X, y_true, average=True):
     """
     accs = []
     it, d = wts.shape
-    if average == True:
+    if average:
         # here we compute the online mean weights
-        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])
-    else:
+        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])  # here we compute the online mean weights
+    else :
         wts_mean = wts
 
     for weigts in wts_mean:
@@ -87,7 +87,7 @@ def compute_errors(wts, X, y_true, average=True):
 
     errs = []
     it, d = wts.shape
-    if average == True:
+    if average:
         wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])
     else:
         wts_mean = wts
@@ -97,4 +97,3 @@ def compute_errors(wts, X, y_true, average=True):
         err = 1 - accuracy(y_pred, y_true)
         errs.append(err)
     return errs
-

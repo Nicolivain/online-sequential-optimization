@@ -50,7 +50,7 @@ def smd(model, X, y, epoch, l, z=1, lr=1, verbose=0):
     return losses, np.array(wts)
 
 
-def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
+def seg(model, X, y, epoch, l, z=1, lr=1, verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -83,7 +83,7 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
         tetatp += etat * model.gradLoss(sample_x, sample_y, l)
         tetat = np.r_[tetatm, tetatp]
         new_wts = np.exp(tetat)/np.sum(np.exp(tetat))
-        new_wts  = z * (new_wts[0:d] - new_wts[d:])
+        new_wts = z * (new_wts[0:d] - new_wts[d:])
         wts.append(new_wts)
         model.w = new_wts
 

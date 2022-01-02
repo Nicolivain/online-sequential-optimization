@@ -1,23 +1,21 @@
 """
 This file contains functions for Exploration algorithm applied at the SVM problem
 """
-
 import random as rd
 import numpy as np
 
 
 def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
-    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-    :param model: the model
-    :param X: (nxm) data
-    :param y: (n)  labels
-    :param lr: (float) learning rate
-    :param epoch: (int) maximum number of iteration of the algorithm
-    :param l:  (float) regularization parameter (lambda)
-    :param z: (float) radius of the l1-ball
-    :param verbose: (int) print epoch results every n epochs
-    """
+        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+        :param X: (nxm) data
+        :param y: (n)  labels
+        :param lr: (float) learning rate
+        :param epoch: (int) maximum number of iteration of the algorithm
+        :param l:  (float) regularization parameter (lambda)
+        :param z: (float) radius of the l1-ball
+        :param verbose: (int) print epoch results every n epochs
+        """
 
     n, d = X.shape
     losses = []
@@ -82,8 +80,9 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
         idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
-        Jt = np.random.randint(0, d, 1)  # sample the direction
-        sgt = np.random.randint(0, 2, 1, dtype=bool)  # sample the sign : True is + and False is -
+        arm = np.random.choice(2*d,1, p=prob) # sample an arm according to weights
+        Jt = arm*(arm<=d-1) + (arm-d)*(arm>=d) # index corresponding to our representation
+        sgt = 1-2*(arm>=d) # corresponding sign : + if arm <= d-1 and - else
 
         # update the last xt
         t = i + 1

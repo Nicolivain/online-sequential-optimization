@@ -42,7 +42,7 @@ def plot_loss(loss, graph_title=None):
         return ax
 
 
-def compute_accuracies(wts, X, y_true, average = True):
+def compute_accuracies(wts, X, y_true, average=True):
     """
     This function computes the accuracy using averaged weights
     wts (txm) : weigths at each time step of the algo
@@ -52,6 +52,7 @@ def compute_accuracies(wts, X, y_true, average = True):
     accs = []
     it, d = wts.shape
     if average:
+        # here we compute the online mean weights
         wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])  # here we compute the online mean weights
     else :
         wts_mean = wts
@@ -88,7 +89,7 @@ def compute_errors(wts, X, y_true, average=True):
     it, d = wts.shape
     if average:
         wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])
-    else :
+    else:
         wts_mean = wts
 
     for weigts in wts_mean:

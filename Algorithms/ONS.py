@@ -37,9 +37,10 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
 
         # matrices update
         A += grad @ grad.T  # Hessian approximated by grad@grad.T
-        #Ainstg = Ainv@grad #vect
-        #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
-        Ainv = np.linalg.inv(A)  # using the linalg inversion of A_t at each step t
+        # Ainstg = Ainv@grad # vect
+        # Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
+        # using the linalg inversion of A_t at each step t
+        Ainv = np.linalg.inv(A)
 
         # update the last xt
         yt = wts[-1] - (1 / gamma) * Ainv @ grad

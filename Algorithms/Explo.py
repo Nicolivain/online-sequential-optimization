@@ -3,20 +3,20 @@ This file contains functions for Exploration algorithm applied at the SVM proble
 """
 import random as rd
 import numpy as np
-from Algorithms.Projector import *
 
 
 def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -30,11 +30,11 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
         idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
-        Jt = np.random.randint(0, d, 1) # sample the direction
+        Jt = np.random.randint(0, d, 1)  # sample the direction
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
+        etat = lr * np.sqrt(1 / t)
 
         tetatm[Jt] -= (etat * model.gradLoss(sample_x, sample_y, l))[Jt]
         tetatp[Jt] += (etat * model.gradLoss(sample_x, sample_y, l))[Jt]
@@ -58,15 +58,16 @@ def sreg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
 def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param lr: (float) learning rate
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     n, d = X.shape
     losses = []
@@ -80,12 +81,12 @@ def sbeg(model, X, y, lr, epoch, l, z=1, verbose=0):
         idx = rd.randint(0, n - 1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
-        Jt = np.random.randint(0, d, 1) # sample the direction
-        sgt = np.random.randint(0, 2, 1, dtype=bool) # sample the sign : True is + and False is -
+        Jt = np.random.randint(0, d, 1)  # sample the direction
+        sgt = np.random.randint(0, 2, 1, dtype=bool)  # sample the sign : True is + and False is -
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
+        etat = lr * np.sqrt(1 / t)
 
         # if sign is > 0 then we modify the first part 
         if sgt :

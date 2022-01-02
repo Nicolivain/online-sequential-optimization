@@ -236,8 +236,6 @@ if 'sbeg' in alg_to_run:
     SBEGerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(SBEGerrors)
 
-lr = 0.003
-
 if 'adam' in alg_to_run:
     model = LinearSVM(m)
     tic = time.time()
@@ -269,7 +267,6 @@ if 'adam_fixlr' in alg_to_run:
     ax[1].plot(AdamLRaccuracies)
     AdamLRerrors = compute_errors(wts, test_data, test_labels)
     ax[2].plot(AdamLRerrors)
-
 
 if 'adamproj' in alg_to_run:
     model = LinearSVM(m)

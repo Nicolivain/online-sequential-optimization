@@ -28,7 +28,7 @@ np.random.seed(123)
 
 lr = 0.1
 nepoch = 1000
-lbd = 1/3
+lbd = 1/3 # or change to 1/5 for sbeg and sreg to get better results
 Z = [100]
 Zsbeg = [1000]
 gamma = 1/8

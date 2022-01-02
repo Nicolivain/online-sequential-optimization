@@ -94,7 +94,7 @@ if 'gd' in alg_to_run:
 # Constrained GD: projection on B1(z)
 
 if 'c_gd' in alg_to_run:
-    for z in Z: #play with the projection radius
+    for z in Z:  # play with the projection radius
         print("-----------c_GD - z="+str(z)+"----------- \n")
         model = LinearSVM(m)
         tic = time.time()
@@ -109,7 +109,7 @@ if 'c_gd' in alg_to_run:
         GDprojaccuracies = compute_accuracies(wts, test_data, test_labels, average=False) #no average for gd
         ax[1].plot(GDprojaccuracies, label = 'c_gd z='+str(z))
         GDprojerrors = compute_errors(wts, test_data, test_labels, average=False)
-        ax[2].plot(GDprojerrors,label = 'c_gd z='+str(z))
+        ax[2].plot(GDprojerrors, label = 'c_gd z='+str(z))
 
 # Unconstrained SGD
 
@@ -132,7 +132,7 @@ if 'sgd' in alg_to_run:
 # Projected SGD
 
 if 'c_sgd' in alg_to_run:
-    for z in Z: #play with the projection radius
+    for z in Z:  # play with the projection radius
         print("-----------c_SGD - z=" + str(z)+"----------- \n")
         model = LinearSVM(m)
         tic = time.time()
@@ -275,8 +275,7 @@ if 'adam' in alg_to_run:
 if 'adam_fixlr' in alg_to_run:
     model = LinearSVM(m)
     tic = time.time()
-    AdamLRloss, wts = adam(model, train_data, train_labels,
-                         lr, nepoch, lbd, z, [0.9, 0.999], verbose, adaptative_lr=False)
+    AdamLRloss, wts = adam(model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose, adaptative_lr=False)
     time_dict['adam_fixlr'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)

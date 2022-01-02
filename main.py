@@ -28,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 5000
+nepoch = 10000
 lbd = 1/3
 Z = [1,10,100]
 gamma = 1/8
@@ -36,9 +36,7 @@ verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
-
-alg_to_run = ['sreg']
-
+alg_to_run = ['c_sgd', 'adagrad', 'ons', 'adam']
 
 ############################### Read and prepare data ###############################
 
@@ -252,30 +250,31 @@ if 'sbeg' in alg_to_run:
         ax[2].plot(SBEGerrors, label = 'sbeg z='+str(z))
 
 lr = 0.003
+betas = [0.9, 0.999]
 
 if 'adam' in alg_to_run:
-    for z in Z:
-        print("-----------Adam - z=" + str(z) + "----------- \n")
-        model = LinearSVM(m)
-        tic = time.time()
-        Adamloss, wts = adam(model, train_data, train_labels,
-                             lr, nepoch, lbd, z, [0.9, 0.999], verbose)
-        time_dict['adam'] = (time.time() - tic)
-        pred_test_labels = model.predict(test_data)
-        acc = accuracy(test_labels, pred_test_labels)
-        print('After {:3d} epoch, adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-            nepoch, Adamloss[-1], acc))
-        ax[0].plot(np.arange(nepoch), Adamloss, label = 'adam z='+str(z))
-        Adamaccuracies = compute_accuracies(wts, test_data, test_labels)
-        ax[1].plot(Adamaccuracies, label = 'adam z='+str(z))
-        Adamerrors = compute_errors(wts, test_data, test_labels)
-        ax[2].plot(Adamerrors, label = 'adam z='+str(z))
+    print("-----------Adam ----------- \n")
+    model = LinearSVM(m)
+    tic = time.time()
+    Adamloss, wts = adam(model, train_data, train_labels,
+                            lr, nepoch, lbd, 1, betas, verbose)
+    time_dict['adam'] = (time.time() - tic)
+    pred_test_labels = model.predict(test_data)
+    acc = accuracy(test_labels, pred_test_labels)
+    print('After {:3d} epoch, adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+        nepoch, Adamloss[-1], acc))
+    ax[0].plot(np.arange(nepoch), Adamloss, label = 'adam')
+    Adamaccuracies = compute_accuracies(wts, test_data, test_labels)
+    ax[1].plot(Adamaccuracies, label = 'adam')
+    Adamerrors = compute_errors(wts, test_data, test_labels)
+    ax[2].plot(Adamerrors, label = 'adam')
 
 if 'adam_fixlr' in alg_to_run:
+    print("-----------Adam fixed lr----------- \n")
     model = LinearSVM(m)
     tic = time.time()
     AdamLRloss, wts = adam(model, train_data, train_labels,
-                         lr, nepoch, lbd, z, [0.9, 0.999], verbose, adaptative_lr=False)
+                         lr, nepoch, lbd, 1, betas, verbose, adaptative_lr=False)
     time_dict['adam_fixlr'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -289,43 +288,48 @@ if 'adam_fixlr' in alg_to_run:
 
 
 if 'adamproj' in alg_to_run:
-    model = LinearSVM(m)
-    tic = time.time()
-    AdamProjloss, wts = adamproj(
-        model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
-    time_dict['adamproj'] = (time.time() - tic)
-    pred_test_labels = model.predict(test_data)
-    acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, projected adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-        nepoch, AdamProjloss[-1], acc))
-    ax[0].plot(np.arange(nepoch), AdamProjloss, label = 'adamproj')
-    AdamProjaccuracies = compute_accuracies(wts, test_data, test_labels)
-    ax[1].plot(AdamProjaccuracies, label = 'adamproj')
-    AdamProjerrors = compute_errors(wts, test_data, test_labels)
-    ax[2].plot(AdamProjerrors, label = 'adamproj')
+    for z in Z : 
+        print("-----------Adam projected - z=" + str(z) + "----------- \n")
+        model = LinearSVM(m)
+        tic = time.time()
+        AdamProjloss, wts = adamproj(
+            model, train_data, train_labels, lr, nepoch, lbd, z, betas, verbose)
+        time_dict['adamproj'] = (time.time() - tic)
+        pred_test_labels = model.predict(test_data)
+        acc = accuracy(test_labels, pred_test_labels)
+        print('After {:3d} epoch, projected adam algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+            nepoch, AdamProjloss[-1], acc))
+        ax[0].plot(np.arange(nepoch), AdamProjloss, label = 'adamproj - z=' + str(z))
+        AdamProjaccuracies = compute_accuracies(wts, test_data, test_labels)
+        ax[1].plot(AdamProjaccuracies, label = 'adamproj - z=' + str(z))
+        AdamProjerrors = compute_errors(wts, test_data, test_labels)
+        ax[2].plot(AdamProjerrors, label = 'adamproj - z=' + str(z))
 
 if 'adamp' in alg_to_run:
-    p = 3
-    model = LinearSVM(m)
-    tic = time.time()
-    AdamPloss, wts = adamP(model, train_data, train_labels,
-                           lr, nepoch, lbd, z, [0.9, 0.999], p, verbose)
-    time_dict['adamp'] = (time.time() - tic)
-    pred_test_labels = model.predict(test_data)
-    acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, adam with norm L{:3d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-        nepoch, p, AdamPloss[-1], acc))
-    ax[0].plot(np.arange(nepoch), AdamPloss, label = 'adamp')
-    AdamPaccuracies = compute_accuracies(wts, test_data, test_labels)
-    ax[1].plot(AdamPaccuracies, label = 'adamp')
-    AdamPerrors = compute_errors(wts, test_data, test_labels)
-    ax[2].plot(AdamPerrors, label = 'adamp')
+    P = [1, 2, 3]
+    for p in P :
+        print("-----------Adam norm : L" + str(p) +"----------- \n")
+        model = LinearSVM(m)
+        tic = time.time()
+        AdamPloss, wts = adamP(model, train_data, train_labels,
+                            lr, nepoch, lbd, 1, betas, p, verbose)
+        time_dict['adamp'] = (time.time() - tic)
+        pred_test_labels = model.predict(test_data)
+        acc = accuracy(test_labels, pred_test_labels)
+        print('After {:3d} epoch, adam with norm L{:3d} algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
+            nepoch, p, AdamPloss[-1], acc))
+        ax[0].plot(np.arange(nepoch), AdamPloss, label = 'adam with norm L' + str(p))
+        AdamPaccuracies = compute_accuracies(wts, test_data, test_labels)
+        ax[1].plot(AdamPaccuracies, label = 'adam with norm L' + str(p))
+        AdamPerrors = compute_errors(wts, test_data, test_labels)
+        ax[2].plot(AdamPerrors, label = 'adam with norm L' + str(p))
 
 if 'adamtemp' in alg_to_run:
+    print("-----------Adam with temporal averaging ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
     AdamTemploss, wts = adamTemporal(
-        model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+        model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
     time_dict['adamtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -338,10 +342,10 @@ if 'adamtemp' in alg_to_run:
     ax[2].plot(AdamTemperrors, label = 'adamtemp')
 
 if 'adamax' in alg_to_run:
+    print("-----------Adamax ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    AdaMaxLoss, wts = adaMax(model, train_data, train_labels, lr, nepoch, lbd, z, [
-                             0.9, 0.999], verbose)
+    AdaMaxLoss, wts = adaMax(model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
     time_dict['adamax'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -354,10 +358,11 @@ if 'adamax' in alg_to_run:
     ax[2].plot(AdaMaxerrors, label = 'adamax')
 
 if 'adamaxtemp' in alg_to_run:
+    print("-----------Adamax with temporal averaging ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
     AdaMaxTempLoss, wts = adaMaxTemporal(
-        model, train_data, train_labels, lr, nepoch, lbd, z, [0.9, 0.999], verbose)
+        model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
     time_dict['adamaxtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)

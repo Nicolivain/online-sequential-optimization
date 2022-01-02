@@ -3,16 +3,17 @@ from Algorithms.Projector import *
 import numpy as np
 
 
-def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
+def ons(model, X, y, epoch, l, gamma, z=1, lr=1, verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
     :param model: the model
     :param X: (nxm) data
     :param y: (n)  labels
-    :param gamma: 1/lr for the weight tuning
+    :param gamma: weight tuning and initialisation of A
     :param epoch: (int) maximum number of iteration of the algorithm
     :param l:  (float) regularization parameter (lambda)
     :param z: (float) radius of the l1-ball
+    :param lr: (float) the learning rate
     :param verbose: (int) print epoch results every n epochs
     """
 
@@ -21,7 +22,6 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     model.w = np.zeros(d)
     wts = [model.w]  # initalization = 0
     A = np.diag([1 / gamma**2 for i in range(d)])
-    Ainv = np.diag([gamma**2 for i in range(d)])
 
     for i in range(epoch):
         # sample
@@ -40,7 +40,7 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         Ainv = np.linalg.inv(A)
 
         # update the last xt
-        yt = wts[-1] - (1 / gamma) * Ainv @ grad
+        yt = wts[-1] - lr * (1 / gamma) * Ainv @ grad
         new_wts = weighted_proj_l1(yt, np.diag(A), z)
         # new_wts  = proj_l1ONS(yt, z, A, weighted=True)
         wts.append(new_wts)

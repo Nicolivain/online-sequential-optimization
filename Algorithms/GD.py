@@ -2,7 +2,7 @@ from Algorithms.Projector import *
 import numpy as np
 
 
-def GradientDescent(model, X, y, epoch, l, verbose=0, lr=1):
+def gd(model, X, y, epoch, l, verbose=0, lr=1):
     """
     Unconstrained GD
     :param model: the model

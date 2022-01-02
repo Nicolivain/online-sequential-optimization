@@ -66,7 +66,7 @@ def adam(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0, adaptative_lr
     return losses, np.array(wts)
 
 
-def adamP(model, X, y, lr, epoch, l, betas=[0.9, 0.999], p=2, verbose=0):
+def adam_p(model, X, y, lr, epoch, l, betas=[0.9, 0.999], p=2, verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -120,7 +120,7 @@ def adamP(model, X, y, lr, epoch, l, betas=[0.9, 0.999], p=2, verbose=0):
     return losses, np.array(wts)
 
 
-def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
+def adam_proj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -175,7 +175,7 @@ def adamproj(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adaMax(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
+def adamax(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -226,7 +226,7 @@ def adaMax(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adamTemporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
+def adam_temporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -287,7 +287,7 @@ def adamTemporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     return losses, np.array(wts)
 
 
-def adaMaxTemporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
+def adamax_temporal(model, X, y, lr, epoch, l, betas=[0.9, 0.999], verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model

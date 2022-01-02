@@ -5,8 +5,6 @@ import random as rd
 import numpy as np
 from Algorithms.Projector import *
 
-# TODO : use the mean to update the model (cf .R) because that's the interesting result and not value
-
 def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
@@ -32,20 +30,21 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
-        # update the last xt
+        # compute gradient
         grad = model.gradLoss(sample_x, sample_y, l)
-        new_wts = wts[-1] - (1 / gamma) * Ainv @ grad
-        new_wts = weighted_proj_l1(new_wts, np.diag(A), z)
-        # new_wts  = proj_l1(new_wts, z, np.diag(A))
-        wts.append(new_wts)
-        model.w = new_wts
 
         # matrices update
         A += grad @ grad.T  # Hessian approximated by grad@grad.T
-        #Ainstg = Ainv@grad #vect
-        #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
+        # Ainstg = Ainv@grad # vect
+        # Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
         Ainv = np.linalg.inv(A) #using the linalg inversion of A_t at each step t
 
+        # update the last xt
+        yt = wts[-1] - (1 / gamma) * Ainv @ grad
+        new_wts = weighted_proj_l1(yt, np.diag(A), z)
+        # new_wts  = proj_l1ONS(yt, z, A, weighted=True)
+        wts.append(new_wts)
+        model.w = new_wts
 
         # loss
         current_loss = model.loss(X, y, l)

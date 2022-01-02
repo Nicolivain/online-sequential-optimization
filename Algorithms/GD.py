@@ -5,12 +5,12 @@ from Algorithms.Projector import *
 import numpy as np
 
 
-def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
+def GradientDescent(model, X, y, epoch, l,verbose=0, lr=1):
     """
     Unconstrained GD
     :param X: (nxm) data
     :param y: (n)  labels
-    :param lr: (float) learning rate
+    : lr = 1 -> =1/lambda*t in descent
     :param epoch: (int) maximum number of iteration of the algorithmnp.array(wts)
     :param l:  (float) regularization parameter (lambda)
     :param verbose: (int) print epoch results every n epochs
@@ -19,8 +19,8 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
     wts = [model.w]
     for i in range(epoch):
         t = i + 1
-        lr = 1 / (l * t )
-        new_wts = wts[-1] - lr * model.gradLoss(X, y, l)
+        dlr = lr / (l * t)
+        new_wts = wts[-1] - dlr * model.gradLoss(X, y, l)
         wts.append(new_wts)
         model.w = new_wts
         current_loss = model.loss(X, y, l)
@@ -30,12 +30,11 @@ def GradientDescent(model, X, y, lr, epoch, l, verbose=0):
     return losses, np.array(wts)
 
 
-def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
+def projected_gd(model, x, y, epoch, l, z=1, verbose=0, lr=1):
     """
         Constrained GD with projection on B1(z)
         :param X: (nxm) data
         :param y: (n)  labels
-        :param lr: (float) learning rate
         :param epoch: (int) maximum number of iteration of the algorithm
         :param l:  (float) regularization parameter (lambda)
         :param z: (float) radius for projection on the l1-ball
@@ -47,7 +46,7 @@ def projected_gd(model, x, y, lr, epoch, l, z=1, verbose=0):
     wts = [model.w]
     for i in range(epoch):
         t = i + 1
-        lr = 1 / (l * t)
+        lr = lr / (l * t)
         new_wts = wts[-1] - lr * model.gradLoss(x, y, l)
         new_wts  = proj_l1(new_wts, z)
         wts.append(new_wts)

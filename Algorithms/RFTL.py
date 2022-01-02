@@ -101,7 +101,7 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
     return losses, np.array(wts)
 
 
-def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
+def adagrad(model, X, y, epoch, l, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
         :param model: the model
@@ -142,5 +142,5 @@ def adagrad(model, X, y, lr, epoch, l, z=1, verbose=0):
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
     # update wts:
-    model.w = np.mean(wts, axis=0)
+    model.w = np.mean(wts,axis=0)
     return losses, np.array(wts)

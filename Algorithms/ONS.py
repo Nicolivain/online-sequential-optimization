@@ -28,25 +28,23 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
 
     for i in range(epoch):
         # sample
-        idx = rd.randint(0, n)
+        idx = rd.randint(0, n-1)
         sample_x = X[idx, :].reshape(1, -1)
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
         grad = model.gradLoss(sample_x, sample_y, l)
-        A += grad @ grad.T  # Hessian approximated by grad@grad.T
-
-        # Ainv = np.linalg.inv(A) #test using the inversion of A_t at each step t
-
-        Ainstg = Ainv@grad #vect
-
-        #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
-        Ainv = np.linalg.inv(A)
-        new_wts = wts[-1] - (1/gamma) * Ainv @ grad
-        new_wts = weighted_proj_l1(new_wts, np.diag(A), z=1)
-        #new_wts  = proj_l1(new_wts, z, np.diag(A))
+        new_wts = wts[-1] - (1 / gamma) * Ainv @ grad
+        new_wts = weighted_proj_l1(new_wts, np.diag(A), z)
+        # new_wts  = proj_l1(new_wts, z, np.diag(A))
         wts.append(new_wts)
         model.w = new_wts
+
+        # matrices update
+        A += grad @ grad.T  # Hessian approximated by grad@grad.T
+        #Ainstg = Ainv@grad #vect
+        #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
+        Ainv = np.linalg.inv(A) #using the linalg inversion of A_t at each step t
 
 
         # loss

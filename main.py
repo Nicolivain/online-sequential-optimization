@@ -8,6 +8,7 @@ Le Boudec Lise
 
 Main file 
 """
+
 import time
 import numpy as np
 import pandas as pd
@@ -28,7 +29,7 @@ np.random.seed(123)
 
 lr = 0.1
 nepoch = 1000
-lbd = 1/3 # or change to 1/5 for sbeg and sreg to get better results
+lbd = 1/3  # or change to 1/5 for sbeg and sreg to get better results
 Z = [100]
 Zsbeg = [1000]
 gamma = 1/8
@@ -44,8 +45,7 @@ mnist_train = pd.read_csv('mnist_train.csv', sep=',', header=None)   # Reading
 train_data = mnist_train.values[:, 1:]
 # Normalize data
 train_data = train_data / np.max(train_data)
-train_data = np.c_[train_data, np.ones(
-    train_data.shape[0])]         # Add intercept
+train_data = np.c_[train_data, np.ones(train_data.shape[0])]         # Add intercept
 # Extract labels
 train_labels = mnist_train.values[:, 0]
 # if labels is not 0 => -1 (Convention chosen)
@@ -171,8 +171,7 @@ if 'seg' in alg_to_run:
         print("-----------SEG - z=" + str(z) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        SEGloss, wts = seg(model, train_data, train_labels,
-                           lr, nepoch, lbd, z, verbose)
+        SEGloss, wts = seg(model, train_data, train_labels, nepoch, lbd, z, lr, verbose)
         time_dict['seg z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
@@ -189,8 +188,7 @@ if 'adagrad' in alg_to_run:
         print("-----------Adagrad - z=" + str(z)+"----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        Adagradloss, wts = adagrad(
-            model, train_data, train_labels, nepoch, lbd, z, verbose)
+        Adagradloss, wts = adagrad(model, train_data, train_labels, nepoch, lbd, z, verbose)
         time_dict['adagrad z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)

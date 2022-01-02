@@ -28,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 1000
+nepoch = 10000
 lbd = 1/3
 Z = [10,100]
 gamma = 1/8
@@ -366,11 +366,11 @@ if 'adamaxtemp' in alg_to_run:
 
 # Log scale
 ax[0].set_xscale('log')
-#ax[0].set_yscale('log')
+ax[0].set_yscale('logit')
 ax[1].set_xscale('log')
-#ax[1].set_yscale('log')
+ax[1].set_yscale('logit')
 ax[2].set_xscale('log')
-#ax[2].set_yscale('log')
+ax[2].set_yscale('logit')
 
 # legend
 ax[0].legend()

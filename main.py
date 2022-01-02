@@ -27,17 +27,18 @@ from utils import *
 # --- PARAMETERS ---
 np.random.seed(123)
 
-lr = 0.1
+lr = 1
 nepoch = 1000
 lbd = 1/3
 Z = [100]
+z = 100
 gamma = 1/8
 verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-# alg_to_run = ['sreg']
+alg_to_run = ['smd', 'seg', 'sgd', 'adagrad']
 
 
 ############################### Read and prepare data ###############################
@@ -149,6 +150,7 @@ if 'c_sgd' in alg_to_run:
         ax[2].plot(SGDprojerrors, label = 'c_sgd z='+str(z))
 
 if 'smd' in alg_to_run:
+    print("-----------SMD----------- \n")
     model = LinearSVM(m)
     tic = time.time()
     SMDprojloss, wts = smd(model, train_data, train_labels,
@@ -165,7 +167,7 @@ if 'smd' in alg_to_run:
     ax[2].plot(SMDprojerrors, label = 'smd')
 
 if 'seg' in alg_to_run:
-    print("-----------SMD----------- \n")
+    print("-----------SEG----------- \n")
     model = LinearSVM(m)
     tic = time.time()
     SEGloss, wts = seg(model, train_data, train_labels,

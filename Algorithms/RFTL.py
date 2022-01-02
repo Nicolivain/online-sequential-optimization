@@ -6,7 +6,7 @@ from Algorithms.Projector import *
 import numpy as np
 
 
-def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
+def smd(model, X, y, epoch, l, z=1, lr=1, verbose=0):
     """
     Gradient descent algorithms applied with the CO pb il loss and uses tjhe gradloss function to update parameters
     :param model: the model
@@ -31,9 +31,9 @@ def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
-        # t = i + 1
-        # lr = 1 / np.sqrt(t) # TODO : check why it doesn't work with decresing lr
-        new_wts = wts[-1] - lr * model.gradLoss(sample_x, sample_y, l)
+        t = i + 1
+        dlr = lr / np.sqrt(t)
+        new_wts = wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
         new_wts  = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts
@@ -78,7 +78,7 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
+        etat = lr * np.sqrt(1 / t)
         tetatm -= etat * model.gradLoss(sample_x, sample_y, l)
         tetatp += etat * model.gradLoss(sample_x, sample_y, l)
         tetat = np.r_[tetatm, tetatp]
@@ -115,7 +115,7 @@ def adagrad(model, X, y, epoch, l, z=1, verbose=0, lr=0.1):
     n, d = X.shape
     losses = []
     wts = [1 / (2*d) * np.zeros(d)]
-    sts = np.zeros(d)
+    Sts = np.zeros(d)
 
     for i in range(epoch):
 
@@ -125,9 +125,9 @@ def adagrad(model, X, y, epoch, l, z=1, verbose=0, lr=0.1):
         sample_y = np.array(y[idx])  # need an array for compatibility
 
         # update the last xt
-        sts += model.gradLoss(sample_x, sample_y, l)**2
-        Dt = np.diag(np.sqrt(sts))
-        yts = wts[-1] - lr*np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
+        Sts += model.gradLoss(sample_x, sample_y, l)**2
+        Dt = np.diag(np.sqrt(Sts))
+        yts = wts[-1] - lr * np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
         new_wts = weighted_proj_l1(yts, np.diag(Dt), z)
         wts.append(new_wts)
         model.w = new_wts

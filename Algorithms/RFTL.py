@@ -5,8 +5,6 @@ import random as rd
 import numpy as np
 from Algorithms.Projector import *
 
-# TODO : use the mean to update the model (cf .R) because that's the interesting result and not value 
-
 
 def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
     """
@@ -36,7 +34,7 @@ def smd(model, X, y, lr, epoch, l, z=1, verbose=0):
         # t = i + 1
         # lr = 1 / np.sqrt(t) # TODO : check why it doesn't work with decresing lr
         new_wts = wts[-1] - lr * model.gradLoss(sample_x, sample_y, l)
-        new_wts  = proj_l1(new_wts, z)
+        new_wts = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts
 
@@ -80,12 +78,12 @@ def seg(model, X, y, lr, epoch, l, z=1, verbose=0):
 
         # update the last xt
         t = i + 1
-        etat = np.sqrt(1 / t) 
+        etat = np.sqrt(1 / t)
         tetatm -= etat * model.gradLoss(sample_x, sample_y, l)
         tetatp += etat * model.gradLoss(sample_x, sample_y, l)
         tetat = np.r_[tetatm, tetatp]
         new_wts = np.exp(tetat)/np.sum(np.exp(tetat))
-        new_wts  = z * (new_wts[0:d] - new_wts[d:])
+        new_wts = z * (new_wts[0:d] - new_wts[d:])
         wts.append(new_wts)
         model.w = new_wts
 
@@ -129,7 +127,8 @@ def adagrad(model, X, y, epoch, l, z=1, verbose=0, lr=0.1):
         # update the last xt
         Sts += model.gradLoss(sample_x, sample_y, l)**2
         Dt = np.diag(np.sqrt(Sts))
-        yts = wts[-1] - lr*np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
+        yts = wts[-1] - lr * \
+            np.linalg.inv(Dt).dot(model.gradLoss(sample_x, sample_y, l))
         new_wts = weighted_proj_l1(yts, np.diag(Dt), z)
         wts.append(new_wts)
         model.w = new_wts
@@ -142,5 +141,5 @@ def adagrad(model, X, y, epoch, l, z=1, verbose=0, lr=0.1):
             print("Epoch {:3d} : Loss = {:1.4f}".format(i, current_loss))
 
     # update wts:
-    model.w = np.mean(wts,axis=0)
+    model.w = np.mean(wts, axis=0)
     return losses, np.array(wts)

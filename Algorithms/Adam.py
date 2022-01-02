@@ -49,7 +49,7 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptati
         vtchap = vts/(1 - betas[1]**t)
 
         if adaptative_lr:
-            at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t) 
+            at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t)
             # at = 1/np.sqrt(t)
 
         new_wts = wts[-1] - at * mtchap / (np.sqrt(vtchap) + 10e-8)
@@ -281,7 +281,7 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
 
         tetats = tetat_1s - lr * mtchap / (np.sqrt(vtchap) + 10e-8)
         tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1])
-                   * tetats)
+                    * tetats)
         new_wts = tetatbar / (1 - betas[1]**t)
 
         wts.append(new_wts)

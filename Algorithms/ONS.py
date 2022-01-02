@@ -5,6 +5,7 @@ import random as rd
 import numpy as np
 from Algorithms.Projector import *
 
+
 def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     """
         Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
@@ -37,7 +38,8 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         A += grad @ grad.T  # Hessian approximated by grad@grad.T
         # Ainstg = Ainv@grad # vect
         # Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
-        Ainv = np.linalg.inv(A) #using the linalg inversion of A_t at each step t
+        # using the linalg inversion of A_t at each step t
+        Ainv = np.linalg.inv(A)
 
         # update the last xt
         yt = wts[-1] - (1 / gamma) * Ainv @ grad

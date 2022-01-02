@@ -5,7 +5,7 @@ from Algorithms.Projector import *
 import numpy as np
 
 
-def GradientDescent(model, X, y, epoch, l,verbose=0, lr=1):
+def GradientDescent(model, X, y, epoch, l, verbose=0, lr=1):
     """
     Unconstrained GD
     :param X: (nxm) data
@@ -48,7 +48,7 @@ def projected_gd(model, x, y, epoch, l, z=1, verbose=0, lr=1):
         t = i + 1
         lr = lr / (l * t)
         new_wts = wts[-1] - lr * model.gradLoss(x, y, l)
-        new_wts  = proj_l1(new_wts, z)
+        new_wts = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts
         current_loss = model.loss(x, y, l)

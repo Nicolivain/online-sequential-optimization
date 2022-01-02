@@ -26,7 +26,8 @@ class LinearSVM:
         l (float) : regularization parameter (lambda)"""
 
         if b.shape != ():
-            grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a  # reshape b to nxm to use term-by-term multiplication
+            # reshape b to nxm to use term-by-term multiplication
+            grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a
         else:
             grad = -b * a  # no need for repeat if n=1
 
@@ -44,7 +45,8 @@ class LinearSVM:
 
         temp = 1 - a.dot(self.w)
         if b.shape != ():
-            grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a  # reshape b to nxm to use term-by-term multiplication
+            # reshape b to nxm to use term-by-term multiplication
+            grad = - (np.repeat(b[:, np.newaxis], a.shape[1], 1)) * a
         else:
 
             grad = -b * a  # no need for repeat if n=1
@@ -57,4 +59,4 @@ class LinearSVM:
         data (list) : the data for prediction
         """
 
-        return np.sign(data.dot(self.w)) 
+        return np.sign(data.dot(self.w))

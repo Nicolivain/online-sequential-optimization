@@ -27,7 +27,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 1
+nepoch = 100
 lbd = 1 / 3  # or change to 1/5 for sbeg and sreg to get better results
 Z = [100]
 Zsbeg = [1000]
@@ -206,7 +206,7 @@ if 'adagrad' in alg_to_run:
         model = LinearSVM(m)
         tic = time.time()
         Adagradloss, wts = adagrad(
-            model, train_data, train_labels, nepoch, lbd, z, verbose)
+            model, train_data, train_labels, nepoch, lbd, z, verbose, 1)
         time_dict['adagrad z=' + str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
@@ -224,7 +224,7 @@ if 'ons' in alg_to_run:
         model = LinearSVM(m)
         tic = time.time()
         ONSloss, wts = ons(model, train_data, train_labels,
-                           nepoch, lbd, gamma, z, verbose)
+                           nepoch, lbd, gamma, z, 1, verbose)
         time_dict['ons z=' + str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)

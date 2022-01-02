@@ -31,7 +31,7 @@ def sgd(model, X, y, epoch, l, verbose=0, lr=1):
         # update the last xt
         t = i + 1
         dlr = lr / (l * t)
-        new_wts = (1-1/t)*wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
+        new_wts = (1 - 1 / t) * wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
         wts.append(new_wts)
         model.w = new_wts
 
@@ -73,7 +73,7 @@ def projected_sgd(model, X, y, epoch, l, z=1, verbose=0, lr=1):
         # update the last xt
         t = i + 1
         dlr = lr / (l * t)
-        new_wts = (1-1/t)*wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
+        new_wts = (1 - 1 / t) * wts[-1] - dlr * model.gradLoss(sample_x, sample_y, l)
         new_wts  = proj_l1(new_wts, z)
         wts.append(new_wts)
         model.w = new_wts

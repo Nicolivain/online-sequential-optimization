@@ -28,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 500
+nepoch = 1000
 lbd = 1/3
 Z = [100]
 gamma = 1/8
@@ -395,7 +395,7 @@ plt.show()
 
 plt.clf()
 keys = list(time_dict.keys())
-sns.barplot(x=keys, y=[time_dict[k]*20 for k in keys])
+sns.barplot(x=keys, y=[time_dict[k] for k in keys])
 plt.savefig('execution_time.png')
 plt.show()
 

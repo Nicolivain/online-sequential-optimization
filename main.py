@@ -30,6 +30,7 @@ lr = 0.1
 nepoch = 1000
 lbd = 1/3
 Z = [100]
+Zsbeg = [1000]
 gamma = 1/8
 verbose = 100
 
@@ -238,8 +239,7 @@ if 'sreg' in alg_to_run:
         ax[2].plot(SREGerrors, label='sreg z='+str(z))
 
 if 'sbeg' in alg_to_run:
-    Z = [1000]
-    for z in Z:
+    for z in Zsbeg:
         print("-----------SBEG - z=" + str(z) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()

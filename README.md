@@ -9,3 +9,6 @@ Website: http://wintenberger.fr/ens.html
 - Regularized Follow the Leader (RFTL) variants: Stochastic Mirror Descent (SMD), Stochatic Exponential Gradient (SEG), Adaptative Gradient (AdaGrad)
 - Bandits: SREG, SBEG
 - ADAM variant: Adam, Projected Adam, AdaMax, Adam Temporal, Adamax Temporal
+
+## Contributors
+Lise Le Bodec, Paul Liautaud, Nicolas Olivain

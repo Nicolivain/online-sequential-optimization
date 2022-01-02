@@ -5,7 +5,6 @@ import random as rd
 import numpy as np
 from Algorithms.Projector import *
 
-# TODO : use the mean to update the model (cf .R) because that's the interesting result and not value
 
 def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     """
@@ -45,7 +44,6 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         #Ainstg = Ainv@grad #vect
         #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
         Ainv = np.linalg.inv(A) #using the linalg inversion of A_t at each step t
-
 
         # loss
         current_loss = model.loss(X, y, l)

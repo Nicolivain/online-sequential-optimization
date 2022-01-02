@@ -28,16 +28,16 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 5000
+nepoch = 500
 lbd = 1/3
-Z = [1,10,100]
+Z = [100]
 gamma = 1/8
 verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-alg_to_run = ['sreg']
+# alg_to_run = ['sreg']
 
 
 ############################### Read and prepare data ###############################
@@ -395,7 +395,7 @@ plt.show()
 
 plt.clf()
 keys = list(time_dict.keys())
-sns.barplot(x=keys, y=[time_dict[k] for k in keys])
+sns.barplot(x=keys, y=[time_dict[k]*20 for k in keys])
 plt.savefig('execution_time.png')
 plt.show()
 

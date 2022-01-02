@@ -12,6 +12,7 @@ def accuracy(y_pred, y_true):
         raise KeyError("prediction and truth must be the same size")
     return np.sum(y_pred == y_true)/len(y_true)
 
+
 def error(y_pred, y_true):
     """
     Compute the error of the provided predictions
@@ -40,6 +41,7 @@ def plot_loss(loss, graph_title=None):
             ax = plt.plot(idx, vals, title=graph_title, legend=key)
         return ax
 
+
 def compute_accuracies(wts, X, y_true, average = True):
     """
     This function computes the accuracy using averaged weights
@@ -49,8 +51,8 @@ def compute_accuracies(wts, X, y_true, average = True):
     """
     accs = []
     it, d = wts.shape
-    if average == True :
-        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis]) #here we compute the online mean weights
+    if average:
+        wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])  # here we compute the online mean weights
     else :
         wts_mean = wts
 
@@ -59,6 +61,7 @@ def compute_accuracies(wts, X, y_true, average = True):
         acc = accuracy(y_pred, y_true)
         accs.append(acc)
     return accs
+
 
 def rate(wts, X, y):
     """
@@ -71,8 +74,9 @@ def rate(wts, X, y):
     for w in wts:
         acc.append(np.mean(y*X.dot(w) > 0))
     return acc
-    
-def compute_errors(wts, X, y_true, average = True):
+
+
+def compute_errors(wts, X, y_true, average=True):
     """
     Compute the accuracy wrt time of the provided predictions and data
     wts (txm) : weigths at each time step of the algo
@@ -82,7 +86,7 @@ def compute_errors(wts, X, y_true, average = True):
 
     errs = []
     it, d = wts.shape
-    if average == True :
+    if average:
         wts_mean = np.cumsum(wts, 0)/(np.arange(1, it + 1)[:, np.newaxis])
     else :
         wts_mean = wts
@@ -92,4 +96,3 @@ def compute_errors(wts, X, y_true, average = True):
         err = 1 - accuracy(y_pred, y_true)
         errs.append(err)
     return errs
-

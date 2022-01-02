@@ -41,16 +41,13 @@ def adam(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0, adaptati
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = betas[1] * vt_1s + (1 - betas[1]) * \
-            model.gradLoss(sample_x, sample_y, l)**2
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = betas[1] * vt_1s + (1 - betas[1]) * model.gradLoss(sample_x, sample_y, l)**2
         mtchap = mts/(1 - betas[0]**t)
         vtchap = vts/(1 - betas[1]**t)
 
         if adaptative_lr:
-            at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t) 
-            # at = 1/np.sqrt(t)
+            at = lr * np.sqrt(1 - betas[1]**t)/(1 - betas[0]**t)
 
         new_wts = wts[-1] - at * mtchap / (np.sqrt(vtchap) + 10e-8)
         wts.append(new_wts)
@@ -215,10 +212,8 @@ def adaMax(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = np.maximum(betas[1] * vt_1s,
-                         np.abs(model.gradLoss(sample_x, sample_y, l)))
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = np.maximum(betas[1] * vt_1s, np.abs(model.gradLoss(sample_x, sample_y, l)))
 
         new_wts = wts[-1] - lr / (1 - betas[0]**t) * mts / vts
         wts.append(new_wts)
@@ -280,8 +275,7 @@ def adamTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0):
         vtchap = vts/(1 - betas[1]**t)
 
         tetats = tetat_1s - lr * mtchap / (np.sqrt(vtchap) + 10e-8)
-        tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1])
-                   * tetats)
+        tetatbar = (betas[1] * tetatbar_1s + (1 - betas[1]) * tetats)
         new_wts = tetatbar / (1 - betas[1]**t)
 
         wts.append(new_wts)
@@ -336,14 +330,11 @@ def adaMaxTemporal(model, X, y, lr, epoch, l, z=1, betas=[0.9, 0.999], verbose=0
         # update the last xt
         t = i + 1
 
-        mts = betas[0] * mt_1s + (1 - betas[0]) * \
-            model.gradLoss(sample_x, sample_y, l)
-        vts = np.maximum(betas[1] * vt_1s,
-                         np.abs(model.gradLoss(sample_x, sample_y, l)))
+        mts = betas[0] * mt_1s + (1 - betas[0]) * model.gradLoss(sample_x, sample_y, l)
+        vts = np.maximum(betas[1] * vt_1s, np.abs(model.gradLoss(sample_x, sample_y, l)))
 
         tetats = tetat_1s - lr / (1 - betas[0]**t) * mts / vts
-        new_wts = (betas[1] * tetat_1s + (1 - betas[1])
-                   * tetats) / (1 - betas[1]**t)
+        new_wts = (betas[1] * tetat_1s + (1 - betas[1]) * tetats) / (1 - betas[1]**t)
 
         wts.append(new_wts)
         model.w = new_wts

@@ -47,12 +47,14 @@ def proj_simplex(v, z=1):
     w = np.clip(v - theta, 0, np.max(v-theta))
     return w
 
-def proj_l1(vect,z=1):
+
+def proj_l1(vect, z=1):
     v = np.abs(vect)
-    if np.sum(v)>z : #outside of the l1-ball
-        u = proj_simplex(v,z)
+    if np.sum(v) > z :  # outside of the l1-ball
+        u = proj_simplex(v, z)
         vect = np.sign(vect)*u
     return vect
+
 
 def weighted_proj_l1(vect, w, z=1):
     """Weighted projection on the l1-ball of
@@ -70,7 +72,9 @@ def weighted_proj_l1(vect, w, z=1):
         vect = np.sign(vect)*np.clip(np.abs(vect) - theta/w, 0, np.max(np.abs(vect) - theta/w))
     return vect
 
+
 if __name__ == '__main__':
+
     # Unit Testing
     x = np.random.rand(10) * 2 - 1
     p = proj_simplex(x)

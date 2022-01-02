@@ -53,6 +53,7 @@ alg_to_run = [
     'adamtemp',
     'adamaxtemp']
 
+
 ############################### Read and prepare data ####################
 
 mnist_train = pd.read_csv('mnist_train.csv', sep=',', header=None)   # Reading

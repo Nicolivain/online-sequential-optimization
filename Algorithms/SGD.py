@@ -1,6 +1,3 @@
-"""
-This file contains functions for stochastic gradient descent algorithm applied at the SVM problem
-"""
 import random as rd
 from Algorithms.Projector import *
 import numpy as np

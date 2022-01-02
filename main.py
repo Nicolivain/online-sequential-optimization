@@ -223,13 +223,11 @@ if 'sreg' in alg_to_run:
         print("-----------SREG - z=" + str(z) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        SREGloss, wts = sreg(model, train_data, train_labels,
-                            nepoch, lbd, z, verbose)
+        SREGloss, wts = sreg(model, train_data, train_labels, nepoch, lbd, z, lr=1, verbose=verbose)
         time_dict['sreg z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
-        print('After {:3d} epoch, constrained SREG (radius {:3d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-            nepoch, z, SREGloss[-1], acc))
+        print('After {:3d} epoch, constrained SREG (radius {:3d}) algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, z, SREGloss[-1], acc))
         ax[0].plot(np.arange(nepoch), SREGloss, label='sreg z='+str(z))
         SREGaccuracies = compute_accuracies(wts, test_data, test_labels)
         ax[1].plot(SREGaccuracies, label='sreg z='+str(z))
@@ -241,13 +239,11 @@ if 'sbeg' in alg_to_run:
         print("-----------SBEG - z=" + str(z) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        SBEGloss, wts = sbeg(model, train_data, train_labels,
-                            nepoch, lbd, z, verbose)
+        SBEGloss, wts = sbeg(model, train_data, train_labels, nepoch, lbd, z, lr=1, verbose=verbose)
         time_dict['sbeg z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
-        print('After {:3d} epoch, constrained SBEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-            nepoch, SBEGloss[-1], acc))
+        print('After {:3d} epoch, constrained SBEG algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, SBEGloss[-1], acc))
         ax[0].plot(np.arange(nepoch), SBEGloss, label='sbeg z='+str(z))
         SBEGaccuracies = compute_accuracies(wts, test_data, test_labels)
         ax[1].plot(SBEGaccuracies, label='sbeg z='+str(z))
@@ -261,8 +257,7 @@ if 'adam' in alg_to_run:
     print("-----------Adam ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    Adamloss, wts = adam(model, train_data, train_labels,
-                         lr, nepoch, lbd, 1, betas, verbose)
+    Adamloss, wts = adam(model, train_data, train_labels, lr, nepoch, lbd, betas, verbose)
     time_dict['adam'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -278,13 +273,11 @@ if 'adam_fixlr' in alg_to_run:
     print("-----------Adam fixed lr----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    AdamLRloss, wts = adam(model, train_data, train_labels,
-                           lr, nepoch, lbd, 1, betas, verbose, adaptative_lr=False)
+    AdamLRloss, wts = adam(model, train_data, train_labels, lr, nepoch, lbd, betas, verbose, adaptative_lr=False)
     time_dict['adam_fixlr'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
-    print('After {:3d} epoch, adam with fixed lr algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(
-        nepoch, AdamLRloss[-1], acc))
+    print('After {:3d} epoch, adam with fixed lr algorithm has a loss of {:1.6f} and accuracy {:1.6f}'.format(nepoch, AdamLRloss[-1], acc))
     ax[0].plot(np.arange(nepoch), AdamLRloss, label='adam_fixlr')
     AdamLRaccuracies = compute_accuracies(wts, test_data, test_labels)
     ax[1].plot(AdamLRaccuracies, label='adam_fixlr')
@@ -297,8 +290,7 @@ if 'adamproj' in alg_to_run:
         print("-----------Adam projected - z=" + str(z) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        AdamProjloss, wts = adamproj(
-            model, train_data, train_labels, lr, nepoch, lbd, z, betas, verbose)
+        AdamProjloss, wts = adamproj(model, train_data, train_labels, lr, nepoch, lbd, z, betas, verbose)
         time_dict['adamproj z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
@@ -317,8 +309,7 @@ if 'adamp' in alg_to_run:
         print("-----------Adam norm : L" + str(p) + "----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        AdamPloss, wts = adamP(model, train_data, train_labels,
-                               lr, nepoch, lbd, 1, betas, p, verbose)
+        AdamPloss, wts = adamP(model, train_data, train_labels, lr, nepoch, lbd, betas, p, verbose)
         time_dict['adamp p='+str(p)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)
@@ -335,8 +326,7 @@ if 'adamtemp' in alg_to_run:
     print("-----------Adam with temporal averaging ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    AdamTemploss, wts = adamTemporal(
-        model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
+    AdamTemploss, wts = adamTemporal(model, train_data, train_labels, lr, nepoch, lbd, betas, verbose)
     time_dict['adamtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -352,8 +342,7 @@ if 'adamax' in alg_to_run:
     print("-----------Adamax ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    AdaMaxLoss, wts = adaMax(
-        model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
+    AdaMaxLoss, wts = adaMax(model, train_data, train_labels, lr, nepoch, lbd, betas, verbose)
     time_dict['adamax'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -369,8 +358,7 @@ if 'adamaxtemp' in alg_to_run:
     print("-----------Adamax with temporal averaging ----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    AdaMaxTempLoss, wts = adaMaxTemporal(
-        model, train_data, train_labels, lr, nepoch, lbd, 1, betas, verbose)
+    AdaMaxTempLoss, wts = adaMaxTemporal(model, train_data, train_labels, lr, nepoch, lbd, betas, verbose)
     time_dict['adamaxtemp'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)

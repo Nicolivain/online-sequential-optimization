@@ -1,6 +1,3 @@
-"""
-This file contains functions for the mirror descent algorithm applied at the SVM problem
-"""
 import random as rd
 from Algorithms.Projector import *
 import numpy as np

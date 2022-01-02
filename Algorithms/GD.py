@@ -1,6 +1,3 @@
-"""
-This file contains functions for gradient descent algorithm applied at the SVM problem
-"""
 from Algorithms.Projector import *
 import numpy as np
 

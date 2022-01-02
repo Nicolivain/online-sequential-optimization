@@ -31,14 +31,14 @@ lr = 1
 nepoch = 1000
 lbd = 1/3
 Z = [100]
-z = 100
-gamma = 1/8
+z = 1000
+gamma = 1/2
 verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
 
-alg_to_run = ['smd', 'seg', 'sgd', 'adagrad']
+alg_to_run = ['sgd', 'adagrad', 'ons']
 
 
 ############################### Read and prepare data ###############################
@@ -188,8 +188,7 @@ if 'adagrad' in alg_to_run:
         print("-----------Adagrad - z=" + str(z)+"----------- \n")
         model = LinearSVM(m)
         tic = time.time()
-        Adagradloss, wts = adagrad(
-            model, train_data, train_labels, nepoch, lbd, z, verbose)
+        Adagradloss, wts = adagrad(model, train_data, train_labels, nepoch, lbd, z, verbose)
         time_dict['adagrad'] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)

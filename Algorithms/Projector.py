@@ -57,7 +57,8 @@ def proj_l1(vect, z=1):
 
 
 def weighted_proj_l1(vect, w, z=1):
-    """Weighted projection on the l1-ball of
+    """
+    Weighted projection on the l1-ball of
     - vect of size (n)
     - using weights w
     - and the radius z of the l1-ball considered

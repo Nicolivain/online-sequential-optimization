@@ -2,21 +2,22 @@
 This file contains functions for gradient descent algorithm applied at the SVM problem
 """
 import random as rd
-import numpy as np
 from Algorithms.Projector import *
+import numpy as np
 
 
 def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
     """
-        Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
-        :param X: (nxm) data
-        :param y: (n)  labels
-        :param lr: (float) learning rate
-        :param epoch: (int) maximum number of iteration of the algorithm
-        :param l:  (float) regularization parameter (lambda)
-        :param z: (float) radius of the l1-ball
-        :param verbose: (int) print epoch results every n epochs
-        """
+    Gradient descent algorithms applied with the CO pb il loss and uses the gradloss function to update parameters
+    :param model: the model
+    :param X: (nxm) data
+    :param y: (n)  labels
+    :param gamma: 1/lr for the weight tuning
+    :param epoch: (int) maximum number of iteration of the algorithm
+    :param l:  (float) regularization parameter (lambda)
+    :param z: (float) radius of the l1-ball
+    :param verbose: (int) print epoch results every n epochs
+    """
 
     losses = []
     n, d = X.shape
@@ -43,7 +44,7 @@ def ons(model, X, y, epoch, l, gamma, z=1, verbose=0):
         A += grad @ grad.T  # Hessian approximated by grad@grad.T
         #Ainstg = Ainv@grad #vect
         #Ainv -= (1 / (1 + grad.T @ Ainstg)) * Ainstg @ (grad.T @ Ainv)
-        Ainv = np.linalg.inv(A) #using the linalg inversion of A_t at each step t
+        Ainv = np.linalg.inv(A)  # using the linalg inversion of A_t at each step t
 
         # loss
         current_loss = model.loss(X, y, l)

@@ -28,7 +28,7 @@ from utils import *
 np.random.seed(123)
 
 lr = 0.1
-nepoch = 10000
+nepoch = 1000
 lbd = 1/3
 Z = [1,10,100]
 gamma = 1/8
@@ -36,7 +36,8 @@ verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',
               'sreg', 'sbeg', 'adam', 'adam_fixlr', 'adamproj', 'adamp', 'adamax', 'adamtemp', 'adamaxtemp']
-alg_to_run = ['c_sgd', 'adagrad', 'ons', 'adam']
+alg_to_run = ['ons', 'adam']
+alg_to_run = ['sgd', 'c_sgd']
 
 ############################### Read and prepare data ###############################
 
@@ -114,7 +115,7 @@ if 'sgd' in alg_to_run:
     print("-----------SGD----------- \n")
     model = LinearSVM(m)
     tic = time.time()
-    SGDloss, wts = sgd(model, train_data, train_labels, nepoch, lbd, verbose, lr)
+    SGDloss, wts = sgd(model, train_data, train_labels, nepoch, lbd, verbose, 1)
     time_dict['sgd'] = (time.time() - tic)
     pred_test_labels = model.predict(test_data)
     acc = accuracy(test_labels, pred_test_labels)
@@ -134,7 +135,7 @@ if 'c_sgd' in alg_to_run:
         model = LinearSVM(m)
         tic = time.time()
         SGDprojloss, wts = projected_sgd(
-            model, train_data, train_labels, nepoch, lbd, z, verbose, lr)
+            model, train_data, train_labels, nepoch, lbd, z, verbose, 1)
         time_dict['c_sgd z='+str(z)] = (time.time() - tic)
         pred_test_labels = model.predict(test_data)
         acc = accuracy(test_labels, pred_test_labels)

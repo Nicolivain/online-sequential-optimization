@@ -32,7 +32,7 @@ nepoch = 1000
 lbd = 1/3
 Z = [100]
 z = 1000
-gamma = 1/2
+gamma = 1/8
 verbose = 100
 
 alg_to_run = ['gd', 'c_gd', 'sgd', 'c_sgd', 'smd', 'seg', 'adagrad', 'ons',

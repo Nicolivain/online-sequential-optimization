@@ -15,5 +15,9 @@ The MNIST data set can be downloaded from http://yann.lecun.com/exdb/mnist/
 The notebook main.ipynb contains a sandbox for all the implemented algorithm for the user to experiment with the hyperparameters and compare respective performances.  
 All the algorithms are benchmarked in a binary classification problem, tuning a linear SVM for model.
 
+## Default config results
+
+![](figs/curves.png)
+
 ## Contributors
 Lise Le Bodec, Paul Liautaud, Nicolas Olivain

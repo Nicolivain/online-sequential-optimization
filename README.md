@@ -17,7 +17,7 @@ All the algorithms are benchmarked in a binary classification problem, tuning a 
 
 ## Default config results
 
-![](figs/curves.png)
+![](figs/curves.jpg)
 
 ## Contributors
 Lise Le Bodec, Paul Liautaud, Nicolas Olivain

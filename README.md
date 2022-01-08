@@ -20,4 +20,4 @@ All the algorithms are benchmarked in a binary classification problem, tuning a 
 ![](figs/curves.jpg)
 
 ## Contributors
-Lise Le Bodec, Paul Liautaud, Nicolas Olivain
+Lise Le Boudec, Paul Liautaud, Nicolas Olivain
